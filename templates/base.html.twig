@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Sortir.com{% endblock %}</title>
@@ -16,6 +16,11 @@
         </nav>
     </header>
     <body>
+        {% for message in app.flashes('success') %}
+        <div>
+            {{ message }}
+        </div>
+    {% endfor %}
         {% block body %}{% endblock %}
     </body>
     <footer>

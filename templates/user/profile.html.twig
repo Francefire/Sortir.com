@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ parent() }} - {{ user.username }} {% endblock %}
+
+{% block body %}
+    <h1>{{ user.username }}</h1>
+    <p>Prénom : {{ user.firstname }}</p>
+    <p>Nom : {{ user.lastname }}</p>
+    <p>Téléphone : {{ user.phone }}</p>
+    <p>Email : {{ user.email }}</p>
+    {# TODO : Ajouter Campus #}
+
+    <a href="{{ path('main_home') }}" class="">Retour</a>
+    {% if app.user.id == id %}
+        <a href="{{ path('user_edit', {'id': user.id}) }}" class="">Modifier mon profil</a>
+    {% endif %}
+{% endblock %}

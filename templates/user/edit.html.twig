@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ parent() }} - Mon profile {% endblock %}
+
+{% block body %}
+    <h1>Mon profile</h1>
+    {{ form_errors(editForm) }}
+    {{ form_start(editForm) }}
+    {{ form_widget(editForm) }}
+    <button>Enregistrer</button>
+    <a href="{{ path('main_home') }}">Retour</a>
+    {{ form_end(editForm) }}
+
+
+{% endblock %}
+
+
