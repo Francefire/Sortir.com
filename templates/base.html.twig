@@ -16,7 +16,12 @@
         </nav>
     </header>
     <body>
-        {% for message in app.flashes('success') %}
+    {% for message in app.flashes('success') %}
+        <div>
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% for message in app.flashes('access_denied') %}
         <div>
             {{ message }}
         </div>
