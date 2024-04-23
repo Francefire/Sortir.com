@@ -2,7 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\Campus;
 use App\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -43,7 +45,13 @@ class EditUserType extends AbstractType
                     'label' => 'Confirmation',
                     'attr' => ['placeholder' => 'Confirmer le mot de passe']
                 ],
-            ])//TODO : Ajouter les champs manquants : 'Campus', 'Ma photo'
+            ])
+            ->add('campus', EntityType::class, [
+                'label' => 'Campus',
+                'class' => Campus::class,
+                'choice_label' => 'name',
+            ])
+            //TODO : Ajouter les champs manquants : 'Ma photo'
         ;
     }
 

@@ -7,7 +7,7 @@
     <p>Nom : {{ user.lastname }}</p>
     <p>Téléphone : {{ user.phone }}</p>
     <p>Email : {{ user.email }}</p>
-    {# TODO : Ajouter Campus #}
+    <p>Campus : {{ user.campus.name }}</p>
 
     <a href="{{ path('main_home') }}" class="">Retour</a>
     {% if app.user.id == id %}
