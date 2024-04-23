@@ -35,7 +35,7 @@ class UserFixtures extends Fixture
         $user->setEmail('user@example.com');
         $user->setPhone('0123456789');
         $user->setAdministrator(false);
-        $user->setActive(false);
+        $user->setActive(true);
         $user->setCampus($this->getReference(CampusFixtures::CAMPUS_REFERENCE));
 
         $manager->persist($user);
