@@ -3,5 +3,8 @@
 {% block title %}Administration{% endblock %}
 
 {% block body %}
-<h1>Administration</h1>
+    <h1>Administration</h1>
+    <a href="{{ path('app_campus') }}">Campus</a>
+    <a href="{{ path('app_admin_users') }}">Utilisateurs</a>
+    <a href="{{ path('app_city') }}">Villes</a>
 {% endblock %}
