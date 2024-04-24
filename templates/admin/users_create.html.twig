@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un utilisateur - Administration{% endblock %}
+
+{% block body %}
+    <h1>Créer un utilisateur</h1>
+    {{ form_errors(registrationForm) }}
+    {{ form_start(registrationForm) }}
+    {{ form_widget(registrationForm) }}
+    <button type="submit" class="btn">Créer</button>
+    {{ form_end(registrationForm) }}
+{% endblock %}
