@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier - Administration{% endblock %}
+
+{% block body %}
+    {{ form_errors(editForm) }}
+    {{ form_start(editForm) }}
+    {{ form_widget(editForm) }}
+    <a href="{{ path('app_admin_users') }}">Retour</a>
+    <button>Enregistrer</button>
+    {{ form_end(editForm) }}
+{% endblock %}
