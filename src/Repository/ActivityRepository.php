@@ -45,4 +45,14 @@ class ActivityRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function findActivityByUser($user)
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.host = :user')
+            ->setParameter('user', $user)
+            ->orderBy('a.startDateTime', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }

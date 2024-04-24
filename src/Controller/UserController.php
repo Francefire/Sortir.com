@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\EditUserType;
+use App\Repository\ActivityRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -48,5 +49,14 @@ class UserController extends AbstractController
             'editForm' => $editForm->createView(),
             'user' => $user
         ]);
+    }
+
+
+    #[Route('/user/activity/{id}', name: 'user_activity')]
+    public function activity(User $user, ActivityRepository $activityRepository): Response
+    {
+        $userActivity = $activityRepository->findActivityByUser($user);
+        dump($userActivity);
+        return $this->render('user/activity.html.twig', compact('userActivity'));
     }
 }

@@ -8,12 +8,15 @@ use App\Entity\City;
 use App\Entity\Location;
 use App\Entity\state;
 use App\Entity\User;
+use App\Repository\LocationRepository;
 use Doctrine\DBAL\Types\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ActivityType extends AbstractType
@@ -47,18 +50,26 @@ class ActivityType extends AbstractType
             ->add('tripInformations', null, [
                 'label' => 'Description et infos :'
             ])
+            ->add('city', EntityType::class, [
+                'mapped' => false,
+                'class' => City::class,
+                'choice_label' => 'name',
+                'label' => 'Ville :',
+                'placeholder' => 'Choisir une ville',
+            ])
 
             ->add('location', EntityType::class, [
                 'class' => Location::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
                 'label' => 'Lieu :',
+                'placeholder' => 'Choisir un lieu',
             ])
             ->add('save', SubmitType::class, ['label' => 'Enregistrer'])
             ->add('publish', SubmitType::class, ['label' => 'Publier la sortie'])
-            ->add('cancel', SubmitType::class, ['label' => 'Annuler'])
 
         ;
     }
+
 
     public function configureOptions(OptionsResolver $resolver): void
     {
