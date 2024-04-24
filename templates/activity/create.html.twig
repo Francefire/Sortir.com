@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - Create Activity{% endblock %}
+
+{% block body %}
+    {{ form_errors(activityForm) }}
+
+    {{ form_start(activityForm, {attr: {id : 'create_activity_form'}}) }}
+    {{ form_widget(activityForm) }}
+    <a href="{{ path('main_home') }}" class="btn btn-primary">Retour</a>
+    {{ form_end(activityForm) }}
+{% endblock %}
+

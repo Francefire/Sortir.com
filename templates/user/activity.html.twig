@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+{% for activity in userActivity %}
+    Nom de la sortie: {{ activity.name }}
+    <br>
+    Date de la sortie: {{ activity.startDateTime|date('d/m/Y') }}
+    <br>
+    Durée de la sortie : {{ activity.duration | date('H:i') }}
+    <br>
+    Description de la sortie: {{ activity.tripInformations }}
+    <br>
+    Nombre de participants: {{ activity.participants|length }}
+    <br>
+    Nombre de participants maximum: {{ activity.maxEntries }}
+    <br>
+    Lieu de la sortie: {{ activity.location.name }}
+    <br>
+    Organisateur de la sortie: {{ activity.host.firstName }}
+    <br>
+    Campus de la sortie : {{ activity.campus.name }}
+    <br>
+    Etat de la sortie: {{ activity.state.label }}
+    <br>
+    Date limite d'inscription : {{ activity.registerLimitDatetime|date('d/m/Y') }}
+
+{% endfor %}
+{% endblock %}
+
+{% block title %}
+
+{% endblock %}
+

@@ -11,10 +11,14 @@ use App\Security\AppAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use App\Entity\Campus;
+use App\Form\CampusType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Firewall;
 
 #[Route('/admin', name: 'app_')]
 class AdminController extends AbstractController
@@ -102,5 +106,35 @@ class AdminController extends AbstractController
 
         $this->addFlash('success', 'Compte supprimé avec succès');
         return $this->redirectToRoute('app_admin_users');
+    }
+
+    #[Route('/campus', name: 'campus')]
+    public function campus(CampusRepository $campusRepository, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $campus = new Campus();
+
+        $campusForm = $this->createForm(CampusType::class, $campus);
+
+        $campusForm->handleRequest($request);
+        if ($campusForm->isSubmitted() && $campusForm->isValid()){
+            $entityManager->persist($campus);
+            $entityManager->flush();
+        }
+
+        $campus = $campusRepository->findAll();
+        return $this->render('admin/campus/list.html.twig', [
+            "campus" => $campus,
+            'campusForm' => $campusForm->createView()
+        ]);
+
+    }
+    #[Route('/campus/delete/{id}', name: 'campus_delete')]
+    public function campus_delete(int $id, CampusRepository $campusRepository,EntityManagerInterface $entityManager):?Response
+    {
+        $campus = $campusRepository->find($id);
+        $entityManager->remove($campus);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_campus');
     }
 }
