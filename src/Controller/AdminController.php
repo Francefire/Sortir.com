@@ -141,6 +141,28 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('app_campus');
     }
 
+    #[Route('/campus/edit/{id}', name: 'campus_edit')]
+    public function campus_edit(CampusRepository $campusRepository,int $id, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $campus = $campusRepository->find($id);
+
+        $campusForm = $this->createForm(CampusType::class, $campus);
+
+        $campusForm->handleRequest($request);
+        if ($campusForm->isSubmitted() && $campusForm->isValid()){
+            $entityManager->persist($campus);
+            $entityManager->flush();
+            return $this->redirectToRoute('app_campus');
+        }
+
+
+        return $this->render('admin/campus/edit.html.twig', [
+            "campus" => $campus,
+            'campusForm' => $campusForm->createView()
+        ]);
+
+    }
+
     #[Route('/city', name: 'city')]
     public function city(CityRepository $cityRepository, Request $request, EntityManagerInterface $entityManager): Response
     {
