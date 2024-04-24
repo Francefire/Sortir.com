@@ -3,17 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Activity;
+use App\Entity\SearchFilter;
 use App\Form\ActivityType;
-
-use App\Entity\State;
-use App\Form\EditActivityType;
+use App\Form\SearchFilterType;
 use App\Repository\ActivityRepository;
 use App\Repository\StateRepository;
-
-use Doctrine\ORM\EntityManager;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -45,6 +42,8 @@ class ActivityController extends AbstractController
             $entityManager->persist($activity);
             $entityManager->flush();
             $this->addFlash('success', 'Activité sauvegardée avec succès');
+
+            //TODO: Rediriger vers la page de detail de la sortie
         }
 
         return $this->render('activity/create.html.twig', [
@@ -53,10 +52,24 @@ class ActivityController extends AbstractController
     }
 
     #[Route('/list', name: 'list')]
-    public function list(ActivityRepository $activityRepository): Response
+    public function list(ActivityRepository $activityRepository, Request $request, UserRepository $userRepository): Response
     {
-        $activities = $activityRepository->findPublishedActivity();
+        $searchFilter = new SearchFilter();
+        $searchFilterForm = $this->createForm(SearchFilterType::class, $searchFilter);
+
+        $searchFilterForm->handleRequest($request);
+
+        if($searchFilterForm->isSubmitted() && $searchFilterForm->isValid()){
+            $user = $userRepository->find($this->getUser());
+            $activities = $activityRepository->findActivitiesBySearchFilter($searchFilter,$user);
+
+        }else{
+            $activities = $activityRepository->findPublishedActivity();
+        }
+
         return $this->render('activity/list.html.twig', [
+            'searchFilter' => $searchFilter,
+            'searchFilterForm' => $searchFilterForm->createView(),
             'activities' => $activities
         ]);
     }

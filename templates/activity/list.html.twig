@@ -1,6 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    {{ form_start(searchFilterForm) }}
+    {{ form_widget(searchFilterForm) }}
+    {{ form_end(searchFilterForm) }}
 
     {% for activity in activities %}
         Nom de la sortie: {{ activity.name }}
