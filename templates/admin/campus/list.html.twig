@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Creation Campus{% endblock %}
+
+{% block body %}
+    <h1>Création de campus</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Campus</th>
+            <th scope="col">Actions</th>
+
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            {% for campu in campus %}
+
+        <tr>
+            <th scope="row">{{ campu.id }}</th>
+
+            <td>{{ campu.name }}</td>
+            <td><a class="btn btn-primary" href="#">Modifier</a>  <a class="btn btn-primary" href="{{ path('app_campus_delete', {'id': campu.id})  }}">Supprimer</a></td>
+
+
+        </tr>
+
+        {% endfor %}
+        <tr>
+            <th scope="row"></th>
+            {{ form_start(campusForm) }}
+
+
+            <td>{{ form_widget(campusForm) }}</td>
+            <td><button type="submit" class="btn btn-primary">Ajouter</button></td>
+
+            {{ form_end(campusForm) }}
+
+        </tr>
+        </tr>
+        </tbody>
+    </table>
+
+{% endblock %}
