@@ -3,10 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Campus;
-use App\Entity\Tasks;
+use App\Entity\City;
 use App\Form\CampusType;
-use App\Form\TaskType;
+use App\Form\CityType;
 use App\Repository\CampusRepository;
+use App\Repository\CityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -61,5 +62,57 @@ class AdminController extends AbstractController
         $entityManager->flush();
 
         return $this->redirectToRoute('app_campus');
+    }
+
+    #[Route('/city', name: 'city')]
+    public function city(CityRepository $cityRepository, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $city = new City();
+
+        $cityForm = $this->createForm(CityType::class, $city);
+
+        $cityForm->handleRequest($request);
+        if ($cityForm->isSubmitted() && $cityForm->isValid()){
+            $entityManager->persist($city);
+            $entityManager->flush();
+        }
+
+        $city = $cityRepository->findAll();
+        return $this->render('admin/city/list.html.twig', [
+            "citys" => $city,
+            'cityForm' => $cityForm->createView()
+        ]);
+
+    }
+    #[Route('/city/delete/{id}', name: 'city_delete')]
+    public function city_delete(int $id, CityRepository $cityRepository,EntityManagerInterface $entityManager):?Response
+    {
+        $city = $cityRepository->find($id);
+        $entityManager->remove($city);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_city');
+    }
+
+    #[Route('/city/edit/{id}', name: 'city_edit')]
+    public function city_edit(CityRepository $cityRepository,int $id, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $city = $cityRepository->find($id);
+
+        $cityForm = $this->createForm(CityType::class, $city);
+
+        $cityForm->handleRequest($request);
+        if ($cityForm->isSubmitted() && $cityForm->isValid()){
+            $entityManager->persist($city);
+            $entityManager->flush();
+            return $this->redirectToRoute('app_city');
+        }
+
+
+        return $this->render('admin/city/edit.html.twig', [
+            "city" => $city,
+            'cityForm' => $cityForm->createView()
+        ]);
+
     }
 }
