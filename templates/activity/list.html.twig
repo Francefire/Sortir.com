@@ -2,6 +2,10 @@
 
 {% block body %}
 
+    {% for activity in activities %}
+        Nom de la sortie: {{ activity.name }}
+        <br>
+    {% endfor %}
 {% endblock %}
 
 {% block title %}

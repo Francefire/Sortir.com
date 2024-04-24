@@ -55,4 +55,13 @@ class ActivityRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findPublishedActivity()
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.state = 2')
+            ->orderBy('a.startDateTime', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }

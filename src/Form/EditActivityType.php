@@ -24,31 +24,18 @@ class EditActivityType extends AbstractType
             ->add('registerLimitDatetime', null, [
                 'widget' => 'single_text',
             ])
+            ->add('maxEntries')
             ->add('duration', null, [
                 'widget' => 'single_text',
             ])
-            ->add('maxEntries')
             ->add('tripInformations')
-            ->add('state', EntityType::class, [
-                'class' => state::class,
-                'choice_label' => 'id',
-            ])
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
             ])
             ->add('location', EntityType::class, [
                 'class' => Location::class,
-                'choice_label' => 'id',
-            ])
-            ->add('host', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
-            ])
-            ->add('participants', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
-                'multiple' => true,
+                'choice_label' => 'name',
             ])
         ;
     }
