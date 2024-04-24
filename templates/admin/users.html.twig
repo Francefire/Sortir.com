@@ -4,42 +4,55 @@
 
 {% block body %}
     <h1>Utilisateurs</h1>
-    <a href="{{ path('app_admin_users_create') }}">Créer un utilisateur</a>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Pseudonym</th>
-            <th>Mot de passe</th>
-            <th>Roles</th>
-            <th>Nom</th>
-            <th>Prénom</th>
-            <th>Email</th>
-            <th>Téléphone</th>
-            <th>Campus</th>
-            <th>Administrateur</th>
-            <th>Activité</th>
-        </tr>
-        {% for user in users %}
+    <details>
+        <summary>Créer un utilisateur</summary>
+        {{ form_errors(registrationForm) }}
+        {{ form_start(registrationForm, {'action': path('app_admin_users_create'), 'method': 'POST'}) }}
+        {{ form_widget(registrationForm) }}
+        <button>Créer</button>
+        {{ form_end(registrationForm) }}
+    </details>
+    <details>
+        <summary>Listes des utlisateurs</summary>
+        <table>
             <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.username }}</td>
-                <td>{{ user.password }}</td>
-                <td>
-                    {% for role in user.roles %}
-                        {{ role }}
-                    {% endfor %}
-                </td>
-                <td>{{ user.firstname }}</td>
-                <td>{{ user.lastname }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.phone }}</td>
-                <td>{{ user.campus.name }}</td>
-                <td>{{ user.administrator }}</td>
-                <td>{{ user.active }}</td>
-                <td><a href="{{ path('app_admin_users_edit', {'id': user.id }) }}">Modifier</a></td>
-                <td><a href="{{ path('app_admin_users_delete', {'id': user.id }) }}">Supprimer</a></td>
+                <th>ID</th>
+                <th>Pseudonym</th>
+                <th>Mot de passe</th>
+                <th>Roles</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Email</th>
+                <th>Téléphone</th>
+                <th>Campus</th>
+                <th>Administrateur</th>
+                <th>Activé</th>
             </tr>
-        {% endfor %}
-    </table>
+            {% for userId, editForm in editForms %}
+                <tr>
+                    {{ form_errors(editForm) }}
+                    {{ form_start(editForm, {'action': path('app_admin_users_edit', {'id': userId }), 'method': 'POST' }) }}
+                    <td>{{ userId }}</td>
+                    <td>{{ form_widget(editForm.username) }}</td>
+                    <td>{{ form_widget(editForm.password) }}</td>
+                    <td>{# form_widget(editForm.roles) #}</td>
+                    <td>{{ form_widget(editForm.firstname) }}</td>
+                    <td>{{ form_widget(editForm.lastname) }}</td>
+                    <td>{{ form_widget(editForm.email) }}</td>
+                    <td>{{ form_widget(editForm.phone) }}</td>
+                    <td>{{ form_widget(editForm.campus) }}</td>
+                    <td>{{ form_widget(editForm.administrator) }}</td>
+                    <td>{{ form_widget(editForm.active) }}</td>
+                    <td>
+                        <button>Modifier</button>
+                    </td>
+                    {{ form_end(editForm) }}
+                    <td>
+                        <a href="{{ path('app_admin_users_delete', {'id': userId}) }}">Supprimer</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </details>
 {% endblock %}
 
