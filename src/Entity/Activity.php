@@ -20,7 +20,7 @@ class Activity
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $startDateTime = null;
+    private ?\DateTimeInterface $startDatetime = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     private ?\DateTimeInterface $duration = null;
@@ -29,14 +29,14 @@ class Activity
     private ?\DateTimeInterface $registerLimitDatetime = null;
 
     #[ORM\Column]
-    private ?int $maxEntries = null;
+    private ?int $maxParticipants = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $tripInformations = null;
+    private ?string $description = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?state $state = null;
+    private ?State $state = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
@@ -78,14 +78,14 @@ class Activity
         return $this;
     }
 
-    public function getStartDateTime(): ?\DateTimeInterface
+    public function getStartDatetime(): ?\DateTimeInterface
     {
-        return $this->startDateTime;
+        return $this->startDatetime;
     }
 
-    public function setStartDateTime(\DateTimeInterface $startDateTime): static
+    public function setStartDatetime(\DateTimeInterface $startDatetime): static
     {
-        $this->startDateTime = $startDateTime;
+        $this->startDatetime = $startDatetime;
 
         return $this;
     }
@@ -114,36 +114,36 @@ class Activity
         return $this;
     }
 
-    public function getMaxEntries(): ?int
+    public function getMaxParticipants(): ?int
     {
-        return $this->maxEntries;
+        return $this->maxParticipants;
     }
 
-    public function setMaxEntries(int $maxEntries): static
+    public function setMaxParticipants(int $maxParticipants): static
     {
-        $this->maxEntries = $maxEntries;
+        $this->maxParticipants = $maxParticipants;
 
         return $this;
     }
 
-    public function getTripInformations(): ?string
+    public function getDescription(): ?string
     {
-        return $this->tripInformations;
+        return $this->description;
     }
 
-    public function setTripInformations(?string $tripInformations): static
+    public function setDescription(?string $description): static
     {
-        $this->tripInformations = $tripInformations;
+        $this->description = $description;
 
         return $this;
     }
 
-    public function getState(): ?state
+    public function getState(): ?State
     {
         return $this->state;
     }
 
-    public function setState(?state $state): static
+    public function setState(?State $state): static
     {
         $this->state = $state;
 

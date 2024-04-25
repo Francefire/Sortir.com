@@ -3,9 +3,29 @@
 
 {% block body %}
     {% include('activity/include/display_activity.html.twig') %}
-    <form action="{{ path('activity_entry', {'id': activity.id}) }}" method="POST" >
-        <button type="submit">S'inscrire</button>
-    </form>
+
+    {% if user in activity.participants %}
+        <form action="{{ path('activity_leave', {'id': activity.id}) }}" method="POST">
+            <button type="submit">Se désinscrire</button>
+        </form>
+    {% else %}
+        <form action="{{ path('activity_join', {'id': activity.id}) }}" method="POST">
+            <button type="submit">S'inscrire</button>
+        </form>
+    {% endif %}
+    <h2>Liste des participants</h2>
+    <table>
+        <tr>
+            <th>Pseudo</th>
+            <th>Prénom</th>
+        </tr>
+        {% for participant in activity.participants %}
+            <tr>
+                <td><a href="{{ path('user_profile', {'id': participant.id}) }}" >{{ participant.username }}</a></td>
+                <td>{{ participant.firstname }}</td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}
 
 

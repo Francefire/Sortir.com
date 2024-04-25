@@ -5,8 +5,6 @@ namespace App\Form;
 use App\Entity\Activity;
 use App\Entity\Campus;
 use App\Entity\Location;
-use App\Entity\state;
-use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -18,17 +16,17 @@ class EditActivityType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('startDateTime', null, [
+                ->add('startDatetime', null, [
                 'widget' => 'single_text',
             ])
             ->add('registerLimitDatetime', null, [
                 'widget' => 'single_text',
             ])
-            ->add('maxEntries')
+            ->add('maxParticipants')
             ->add('duration', null, [
                 'widget' => 'single_text',
             ])
-            ->add('tripInformations')
+            ->add('description')
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
                 'choice_label' => 'name',

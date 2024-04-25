@@ -108,19 +108,40 @@ class ActivityController extends AbstractController
     public function details(Activity $activity): Response
     {
         return $this->render('activity/details.html.twig', [
-            'activity' => $activity
+            'activity' => $activity,
+            'user' => $this->getUser()
         ]);
     }
 
-    #[Route('/entry/{id}', name: 'entry', methods: ['POST'])]
+    #[Route('/join/{id}', name: 'join', methods: ['POST'])]
     public function entry(Activity $activity, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
 
+        //TODO : Utiliser un service pour gérer les inscriptions
         if ($activity->getParticipants()->contains($user)) {
             $this->addFlash('warning', 'Vous êtes déjà inscrit à cette sortie');
-        } else {
-            //TODO : Utiliser un service pour gérer les inscriptions
+        }else if ($activity->getMaxParticipants() <= count($activity->getParticipants())) {
+            $this->addFlash('warning', 'La sortie est complète');
+        }else if ($activity->getState()->getId() != 2) {
+            switch ($activity->getState()->getId()) {
+                case 1:
+                    $this->addFlash('warning', 'La sortie n\'est pas encore ouverte');
+                    break;
+                case 3:
+                    $this->addFlash('warning', 'La sortie est clôturée');
+                    break;
+                case 4:
+                    $this->addFlash('warning', 'La sortie à deja commencée');
+                    break;
+                case 5:
+                    $this->addFlash('warning', 'La sortie est terminée');
+                    break;
+                case 6:
+                    $this->addFlash('warning', 'La sortie est annulée');
+                    break;
+            }
+        }else {
             $this->addFlash('success', 'Vous êtes inscrit à la sortie');
             $activity->addParticipant($user);
             $entityManager->persist($activity);
@@ -128,4 +149,20 @@ class ActivityController extends AbstractController
         }
         return $this->redirectToRoute('activity_details', ['id' => $activity->getId()]);
     }
+
+    #[Route('/leave/{id}', name: 'leave', methods: ['POST'])]
+    public function leave(Activity $activity, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+        if ($activity->getParticipants()->contains($user)) {
+            $this->addFlash('success', 'Vous avez annulé votre participation à la sortie');
+            $activity->removeParticipant($user);
+            $entityManager->persist($activity);
+            $entityManager->flush();
+        }else{
+            $this->addFlash('warning', 'Vous n\'êtes pas inscrit à cette sortie');
+        }
+        return $this->redirectToRoute('activity_details', ['id' => $activity->getId()]);
+    }
+
 }

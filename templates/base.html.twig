@@ -34,15 +34,12 @@
         </nav>
     </header>
     <body>
-    {% for message in app.flashes('success') %}
+    {% for messages in app.flashes %}
+        {% for message in messages %}
         <div>
             {{ message }}
         </div>
-    {% endfor %}
-    {% for message in app.flashes('access_denied') %}
-        <div>
-            {{ message }}
-        </div>
+            {% endfor %}
     {% endfor %}
         {% block body %}{% endblock %}
     </body>
