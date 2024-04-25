@@ -59,11 +59,11 @@ class ActivityController extends AbstractController
 
         $searchFilterForm->handleRequest($request);
 
-        if($searchFilterForm->isSubmitted() && $searchFilterForm->isValid()){
+        if ($searchFilterForm->isSubmitted() && $searchFilterForm->isValid()) {
             $user = $userRepository->find($this->getUser());
-            $activities = $activityRepository->findActivitiesBySearchFilter($searchFilter,$user);
+            $activities = $activityRepository->findActivitiesBySearchFilter($searchFilter, $user);
 
-        }else{
+        } else {
             $activities = $activityRepository->findPublishedActivity();
         }
 
@@ -102,5 +102,30 @@ class ActivityController extends AbstractController
             'activity' => $activity,
             'editActivityForm' => $editActivityForm->createView()
         ]);
+    }
+
+    #[Route('/details/{id}', name: 'details')]
+    public function details(Activity $activity): Response
+    {
+        return $this->render('activity/details.html.twig', [
+            'activity' => $activity
+        ]);
+    }
+
+    #[Route('/entry/{id}', name: 'entry', methods: ['POST'])]
+    public function entry(Activity $activity, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+
+        if ($activity->getParticipants()->contains($user)) {
+            $this->addFlash('warning', 'Vous êtes déjà inscrit à cette sortie');
+        } else {
+            //TODO : Utiliser un service pour gérer les inscriptions
+            $this->addFlash('success', 'Vous êtes inscrit à la sortie');
+            $activity->addParticipant($user);
+            $entityManager->persist($activity);
+            $entityManager->flush();
+        }
+        return $this->redirectToRoute('activity_details', ['id' => $activity->getId()]);
     }
 }
