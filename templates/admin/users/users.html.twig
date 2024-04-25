@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Utilisateurs - Administration{% endblock %}
+
+{% block body %}
+    <h1>Utilisateurs</h1>
+    <details>
+        <summary>Créer un utilisateur</summary>
+        {{ form_errors(registrationForm) }}
+        {{ form_start(registrationForm, {'action': path('app_admin_users_create'), 'method': 'POST'}) }}
+        {{ form_widget(registrationForm) }}
+        <button>Créer</button>
+        {{ form_end(registrationForm) }}
+    </details>
+    <details>
+        <summary>Listes des utlisateurs</summary>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Pseudonym</th>
+                <th>Mot de passe</th>
+                <th>Roles</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Email</th>
+                <th>Téléphone</th>
+                <th>Campus</th>
+                <th>Administrateur</th>
+                <th>Activé</th>
+            </tr>
+            {% for userId, editForm in editForms %}
+                <tr>
+                    {{ form_errors(editForm) }}
+                    {{ form_start(editForm, {'action': path('app_admin_users_edit', {'id': userId }), 'method': 'POST' }) }}
+                    <td>{{ userId }}</td>
+                    <td>{{ form_widget(editForm.username) }}</td>
+                    <td>{{ form_widget(editForm.password) }}</td>
+                    <td>{# form_widget(editForm.roles) #}</td>
+                    <td>{{ form_widget(editForm.firstname) }}</td>
+                    <td>{{ form_widget(editForm.lastname) }}</td>
+                    <td>{{ form_widget(editForm.email) }}</td>
+                    <td>{{ form_widget(editForm.phone) }}</td>
+                    <td>{{ form_widget(editForm.campus) }}</td>
+                    <td>{{ form_widget(editForm.administrator) }}</td>
+                    <td>{{ form_widget(editForm.active) }}</td>
+                    <td>
+                        <button>Modifier</button>
+                    </td>
+                    {{ form_end(editForm) }}
+                    <td>
+                        <a href="{{ path('app_admin_users_delete', {'id': userId}) }}">Supprimer</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </details>
+{% endblock %}
+
