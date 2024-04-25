@@ -11,7 +11,7 @@ class SearchFilter
     private ?bool $organizer = true;
     private ?bool $registered = true;
     private ?bool $notRegistered = true;
-    private ?bool $passed = null;
+    private ?bool $finished = null;
 
     public function getCampus(): ?Campus
     {
@@ -83,14 +83,14 @@ class SearchFilter
         $this->notRegistered = $notRegistered;
     }
 
-    public function getPassed(): ?bool
+    public function getFinished(): ?bool
     {
-        return $this->passed;
+        return $this->finished;
     }
 
-    public function setPassed(?bool $passed): void
+    public function setFinished(?bool $passed): void
     {
-        $this->passed = $passed;
+        $this->finished = $passed;
     }
 
 

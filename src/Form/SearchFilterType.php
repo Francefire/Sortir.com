@@ -53,7 +53,7 @@ class SearchFilterType extends AbstractType
                 'label' => 'Sorties auxquelles je ne suis pas inscrit•e',
                 'required' => false,
             ])
-            ->add('passed', CheckboxType::class, [
+            ->add('finished', CheckboxType::class, [
                 'label' => 'Sorties passées',
                 'required' => false,
             ])

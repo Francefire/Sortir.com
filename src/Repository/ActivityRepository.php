@@ -97,17 +97,23 @@ class ActivityRepository extends ServiceEntityRepository
                 ->setParameter('user', $user);
         }
 
-        if ($searchFilter->getRegistered()) {//TODO: A tester car je pense qu'il faudra changer la requete pour verifier si le user est 'IN (a.participants)'
+        if ($searchFilter->getRegistered() && !$searchFilter->getNotRegistered()) {
             $qb->join('a.participants', 'p')
                 ->andWhere('p = :user')
                 ->setParameter('user', $user);
         }
 
-        if ($searchFilter->getNotRegistered()) {//TODO: A tester car je pense qu'il faudra changer la requete pour verifier si le user est 'NOT IN (a.participants)'
-            if(!$searchFilter->getRegistered()){
-                $qb->join('a.participants', 'p');
-            }
-            $qb->andWhere('p != :user')->setParameter('user', $user);
+        if ($searchFilter->getNotRegistered() && !$searchFilter->getRegistered()) {
+            $qb->join('a.participants', 'p')
+                ->andWhere('p != :user')
+                ->setParameter('user', $user);
+        }
+
+        if($searchFilter->getFinished()){
+            $qb->andWhere('a.state = 5');
+        }else{
+            $qb->andWhere('a.state != 1')
+                ->andWhere('a.state != 5');
         }
 
 
