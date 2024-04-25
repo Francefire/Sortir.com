@@ -5,7 +5,6 @@ namespace App\DataFixtures;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFixtures extends Fixture
 {
@@ -20,7 +19,7 @@ class UserFixtures extends Fixture
         $adminUser->setEmail('admin@example.com');
         $adminUser->setPhone('0123456789');
         $adminUser->setAdministrator(true);
-        $adminUser->setActive(true);
+        $adminUser->setDisabled(false);
         $adminUser->setCampus($this->getReference(CampusFixtures::CAMPUS_REFERENCE));
 
         $manager->persist($adminUser);
@@ -35,7 +34,7 @@ class UserFixtures extends Fixture
         $user->setEmail('user@example.com');
         $user->setPhone('0123456789');
         $user->setAdministrator(false);
-        $user->setActive(true);
+        $user->setDisabled(false);
         $user->setCampus($this->getReference(CampusFixtures::CAMPUS_REFERENCE));
 
         $manager->persist($user);
