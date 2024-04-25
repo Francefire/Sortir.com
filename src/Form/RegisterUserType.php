@@ -14,7 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class AdminEditUserType extends AbstractType
+class RegisterUserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -31,7 +31,7 @@ class AdminEditUserType extends AbstractType
             ))
             ->add('plainPassword', PasswordType::class, [
                 'label' => 'Mot de passe',
-                'required' => false,
+                'validation_groups' => ['register']
             ])
             ->add('firstname', TextType::class, [
                 'label' => 'Prénom'

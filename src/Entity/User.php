@@ -8,7 +8,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_USERNAME', fields: ['username'])]
@@ -21,6 +20,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
     private ?string $username = null;
 
     /**
@@ -36,28 +37,39 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[Assert\Length(min: 8, minMessage: 'Votre mot de passe doit contenir au moins {{ limit }} caractères')]
+    #[Assert\NotBlank(groups: ['register'])]
+    #[Assert\NotNull(groups: ['register'])]
     private ?string $plainPassword = null;
 
     #[ORM\Column(length: 30)]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 30)]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 120, nullable: true)]
+    #[Assert\Email]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
     private ?string $email = null;
 
     #[ORM\Column(length: 12, nullable: true)]
     private ?string $phone = null;
 
     #[ORM\Column]
-    private ?bool $administrator = null;
+    private ?bool $administrator = false;
 
     #[ORM\Column]
-    private ?bool $active = null;
+    private ?bool $disabled = false;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
     private ?Campus $campus = null;
 
     public function getId(): ?int
@@ -84,13 +96,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->username;
+        return (string)$this->username;
     }
 
     /**
+     * @return list<string>
      * @see UserInterface
      *
-     * @return list<string>
      */
     public function getRoles(): array
     {
@@ -195,14 +207,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isActive(): ?bool
+    public function isDisabled(): ?bool
     {
-        return $this->active;
+        return $this->disabled;
     }
 
-    public function setActive(bool $active): static
+    public function setDisabled(bool $disabled): static
     {
-        $this->active = $active;
+        $this->disabled = $disabled;
 
         return $this;
     }

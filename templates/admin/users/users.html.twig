@@ -6,13 +6,13 @@
     <h1>Utilisateurs</h1>
     <details>
         <summary>Créer un utilisateur</summary>
-        {{ form_errors(registrationForm) }}
-        {{ form_start(registrationForm, {'action': path('app_admin_users_create'), 'method': 'POST'}) }}
-        {{ form_widget(registrationForm) }}
+        {{ form_errors(registerForm) }}
+        {{ form_start(registerForm, {'action': path('app_admin_users_create'), 'method': 'POST'}) }}
+        {{ form_widget(registerForm) }}
         <button>Créer</button>
-        {{ form_end(registrationForm) }}
+        {{ form_end(registerForm) }}
     </details>
-    <details>
+    <details open>
         <summary>Listes des utlisateurs</summary>
         <table>
             <tr>
@@ -26,7 +26,7 @@
                 <th>Téléphone</th>
                 <th>Campus</th>
                 <th>Administrateur</th>
-                <th>Activé</th>
+                <th>Désactivé</th>
             </tr>
             {% for userId, editForm in editForms %}
                 <tr>
@@ -34,15 +34,15 @@
                     {{ form_start(editForm, {'action': path('app_admin_users_edit', {'id': userId }), 'method': 'POST' }) }}
                     <td>{{ userId }}</td>
                     <td>{{ form_widget(editForm.username) }}</td>
-                    <td>{{ form_widget(editForm.password) }}</td>
-                    <td>{# form_widget(editForm.roles) #}</td>
+                    <td>{{ form_widget(editForm.plainPassword) }}</td>
+                    <td>{{ form_widget(editForm.roles) }}</td>
                     <td>{{ form_widget(editForm.firstname) }}</td>
                     <td>{{ form_widget(editForm.lastname) }}</td>
                     <td>{{ form_widget(editForm.email) }}</td>
                     <td>{{ form_widget(editForm.phone) }}</td>
                     <td>{{ form_widget(editForm.campus) }}</td>
                     <td>{{ form_widget(editForm.administrator) }}</td>
-                    <td>{{ form_widget(editForm.active) }}</td>
+                    <td>{{ form_widget(editForm.disabled) }}</td>
                     <td>
                         <button>Modifier</button>
                     </td>
