@@ -23,7 +23,7 @@
             <th scope="row">{{ campu.id }}</th>
 
             <td>{{ campu.name }}</td>
-            <td><a class="btn btn-primary" href="#">Modifier</a>  <a class="btn btn-primary" href="{{ path('app_campus_delete', {'id': campu.id})  }}">Supprimer</a></td>
+            <td><a class="btn btn-primary" href="{{ path('app_campus_edit', {'id': campu.id}) }}">Modifier</a>  <a class="btn btn-primary" href="{{ path('app_campus_delete', {'id': campu.id})  }}">Supprimer</a></td>
 
 
         </tr>
