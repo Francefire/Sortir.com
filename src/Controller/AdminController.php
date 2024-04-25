@@ -8,7 +8,7 @@ use App\Entity\User;
 use App\Form\AdminEditUserType;
 use App\Form\CampusType;
 use App\Form\CityType;
-use App\Form\RegistrationFormType;
+use App\Form\RegisterUserType;
 use App\Repository\CampusRepository;
 use App\Repository\CityRepository;
 use App\Repository\UserRepository;
@@ -35,7 +35,7 @@ class AdminController extends AbstractController
     public function users(UserRepository $userRepository): Response
     {
         $user = new User();
-        $registrationForm = $this->createForm(RegistrationFormType::class, $user);
+        $registerForm = $this->createForm(RegisterUserType::class, $user);
 
         $users = $userRepository->findAll();
         $editForms = [];
@@ -47,7 +47,7 @@ class AdminController extends AbstractController
 
         return $this->render('admin/users/users.html.twig', [
             'controller_name' => 'AdminController',
-            'registrationForm' => $registrationForm->createView(),
+            'registerForm' => $registerForm->createView(),
             'editForms' => $editForms
         ]);
     }
@@ -57,21 +57,18 @@ class AdminController extends AbstractController
     {
         $user = new User();
 
-        $registrationForm = $this->createForm(RegistrationFormType::class, $user);
-        $registrationForm->handleRequest($request);
+        $registerForm = $this->createForm(RegisterUserType::class, $user);
+        $registerForm->handleRequest($request);
 
-        if ($registrationForm->isSubmitted() && $registrationForm->isValid()) {
-            $user->setAdministrator(false);
-            $user->setActive(false);
-
+        if ($registerForm->isSubmitted() && $registerForm->isValid()) {
             // encode the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
-                    $registrationForm->get('plainPassword')->getData()
+                    $registerForm->get('plainPassword')->getData()
                 )
             );
-            $user->setCampus($campusRepository->find(1)); // Default campus for admin //TODO: DELETE THIS LINE
+
             $entityManager->persist($user);
             $entityManager->flush();
 

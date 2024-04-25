@@ -6,11 +6,11 @@
     <h1>Utilisateurs</h1>
     <details>
         <summary>Créer un utilisateur</summary>
-        {{ form_errors(registrationForm) }}
-        {{ form_start(registrationForm, {'action': path('app_admin_users_create'), 'method': 'POST'}) }}
-        {{ form_widget(registrationForm) }}
+        {{ form_errors(registerForm) }}
+        {{ form_start(registerForm, {'action': path('app_admin_users_create'), 'method': 'POST'}) }}
+        {{ form_widget(registerForm) }}
         <button>Créer</button>
-        {{ form_end(registrationForm) }}
+        {{ form_end(registerForm) }}
     </details>
     <details>
         <summary>Listes des utlisateurs</summary>
