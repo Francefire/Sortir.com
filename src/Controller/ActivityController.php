@@ -117,10 +117,30 @@ class ActivityController extends AbstractController
     {
         $user = $this->getUser();
 
+        //TODO : Utiliser un service pour gérer les inscriptions
         if ($activity->getParticipants()->contains($user)) {
             $this->addFlash('warning', 'Vous êtes déjà inscrit à cette sortie');
-        } else {
-            //TODO : Utiliser un service pour gérer les inscriptions
+        }else if ($activity->getMaxParticipants() <= count($activity->getParticipants())) {
+            $this->addFlash('warning', 'La sortie est complète');
+        }else if ($activity->getState()->getId() != 2) {
+            switch ($activity->getState()->getId()) {
+                case 1:
+                    $this->addFlash('warning', 'La sortie n\'est pas encore ouverte');
+                    break;
+                case 3:
+                    $this->addFlash('warning', 'La sortie est clôturée');
+                    break;
+                case 4:
+                    $this->addFlash('warning', 'La sortie à deja commencée');
+                    break;
+                case 5:
+                    $this->addFlash('warning', 'La sortie est terminée');
+                    break;
+                case 6:
+                    $this->addFlash('warning', 'La sortie est annulée');
+                    break;
+            }
+        }else {
             $this->addFlash('success', 'Vous êtes inscrit à la sortie');
             $activity->addParticipant($user);
             $entityManager->persist($activity);
