@@ -2,26 +2,23 @@
 
 namespace App\Controller;
 
+use App\Entity\Campus;
 use App\Entity\City;
-use App\Form\CityType;
-use App\Repository\CityRepository;
 use App\Entity\User;
-use App\Form\EditUserType;
+use App\Form\AdminEditUserType;
+use App\Form\CampusType;
+use App\Form\CityType;
 use App\Form\RegistrationFormType;
 use App\Repository\CampusRepository;
+use App\Repository\CityRepository;
 use App\Repository\UserRepository;
-use App\Security\AppAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
-use App\Entity\Campus;
-use App\Form\CampusType;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Firewall;
 
 #[Route('/admin', name: 'app_')]
 class AdminController extends AbstractController
@@ -37,24 +34,36 @@ class AdminController extends AbstractController
     #[Route('/users', name: 'admin_users')]
     public function users(UserRepository $userRepository): Response
     {
-        $users = $userRepository->findAll();
+        $user = new User();
+        $registrationForm = $this->createForm(RegistrationFormType::class, $user);
 
-        return $this->render('admin/users.html.twig', [
+        $users = $userRepository->findAll();
+        $editForms = [];
+
+        foreach ($users as $user) {
+            $editForm = $this->createForm(AdminEditUserType::class, $user);
+            $editForms[$user->getId()] = $editForm->createView();
+        }
+
+        return $this->render('admin/users/users.html.twig', [
             'controller_name' => 'AdminController',
-            'users' => $users
+            'registrationForm' => $registrationForm->createView(),
+            'editForms' => $editForms
         ]);
     }
 
-    #[Route('/users/create', name: 'admin_users_create')]
+    #[Route('/users/create', name: 'admin_users_create', methods: ['POST'])]
     public function users_create(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager, CampusRepository $campusRepository): Response
     {
         $user = new User();
-        $user->setAdministrator(false);
-        $user->setActive(false);
+
         $registrationForm = $this->createForm(RegistrationFormType::class, $user);
         $registrationForm->handleRequest($request);
 
         if ($registrationForm->isSubmitted() && $registrationForm->isValid()) {
+            $user->setAdministrator(false);
+            $user->setActive(false);
+
             // encode the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
@@ -66,38 +75,33 @@ class AdminController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Compte crée avec succès');
+            $this->addFlash('success', 'Utilisateur crée avec succès');
             return $this->redirectToRoute('app_admin_users');
         }
 
-        return $this->render('admin/users_create.html.twig', [
-            'controller_name' => 'AdminController',
-            'registrationForm' => $registrationForm,
-        ]);
+        return $this->redirectToRoute('app_admin_users');
     }
 
-    #[Route('/users/edit/{id}', name: 'admin_users_edit')]
+    #[Route('/users/edit/{id}', name: 'admin_users_edit', methods: ['POST'])]
     public function users_edit(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository, UserPasswordHasherInterface $userPasswordHasher, int $id): Response
     {
         $user = $userRepository->find($id);
 
-        $editForm = $this->createForm(EditUserType::class, $user);
-
+        $editForm = $this->createForm(AdminEditUserType::class, $user);
         $editForm->handleRequest($request);
-        if($editForm->isSubmitted() && $editForm->isValid()) {
+
+        if ($editForm->isSubmitted() && $editForm->isValid()) {
             if (!empty($user->getPlainPassword())) {
                 $user->setPassword($userPasswordHasher->hashPassword($user, $user->getPlainPassword()));
             }
+
             $entityManager->flush();
+
             $this->addFlash('success', 'Profil modifié avec succès');
             return $this->redirectToRoute('app_admin_users');
         }
 
-        return $this->render('admin/users_edit.html.twig', [
-            'controller_name' => 'AdminController',
-            'editForm' => $editForm->createView(),
-            'user' => $user
-        ]);
+        return $this->redirectToRoute('app_admin_users');
     }
 
     #[Route('/users/delete/{id}', name: 'admin_users_delete')]
@@ -119,7 +123,7 @@ class AdminController extends AbstractController
         $campusForm = $this->createForm(CampusType::class, $campus);
 
         $campusForm->handleRequest($request);
-        if ($campusForm->isSubmitted() && $campusForm->isValid()){
+        if ($campusForm->isSubmitted() && $campusForm->isValid()) {
             $entityManager->persist($campus);
             $entityManager->flush();
         }
@@ -131,8 +135,9 @@ class AdminController extends AbstractController
         ]);
 
     }
+
     #[Route('/campus/delete/{id}', name: 'campus_delete')]
-    public function campus_delete(int $id, CampusRepository $campusRepository,EntityManagerInterface $entityManager):?Response
+    public function campus_delete(int $id, CampusRepository $campusRepository, EntityManagerInterface $entityManager): ?Response
     {
         $campus = $campusRepository->find($id);
         $entityManager->remove($campus);
@@ -142,14 +147,14 @@ class AdminController extends AbstractController
     }
 
     #[Route('/campus/edit/{id}', name: 'campus_edit')]
-    public function campus_edit(CampusRepository $campusRepository,int $id, Request $request, EntityManagerInterface $entityManager): Response
+    public function campus_edit(CampusRepository $campusRepository, int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
         $campus = $campusRepository->find($id);
 
         $campusForm = $this->createForm(CampusType::class, $campus);
 
         $campusForm->handleRequest($request);
-        if ($campusForm->isSubmitted() && $campusForm->isValid()){
+        if ($campusForm->isSubmitted() && $campusForm->isValid()) {
             $entityManager->persist($campus);
             $entityManager->flush();
             return $this->redirectToRoute('app_campus');
@@ -171,7 +176,7 @@ class AdminController extends AbstractController
         $cityForm = $this->createForm(CityType::class, $city);
 
         $cityForm->handleRequest($request);
-        if ($cityForm->isSubmitted() && $cityForm->isValid()){
+        if ($cityForm->isSubmitted() && $cityForm->isValid()) {
             $entityManager->persist($city);
             $entityManager->flush();
         }
@@ -183,8 +188,9 @@ class AdminController extends AbstractController
         ]);
 
     }
+
     #[Route('/city/delete/{id}', name: 'city_delete')]
-    public function city_delete(int $id, CityRepository $cityRepository,EntityManagerInterface $entityManager):?Response
+    public function city_delete(int $id, CityRepository $cityRepository, EntityManagerInterface $entityManager): ?Response
     {
         $city = $cityRepository->find($id);
         $entityManager->remove($city);
@@ -194,14 +200,14 @@ class AdminController extends AbstractController
     }
 
     #[Route('/city/edit/{id}', name: 'city_edit')]
-    public function city_edit(CityRepository $cityRepository,int $id, Request $request, EntityManagerInterface $entityManager): Response
+    public function city_edit(CityRepository $cityRepository, int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
         $city = $cityRepository->find($id);
 
         $cityForm = $this->createForm(CityType::class, $city);
 
         $cityForm->handleRequest($request);
-        if ($cityForm->isSubmitted() && $cityForm->isValid()){
+        if ($cityForm->isSubmitted() && $cityForm->isValid()) {
             $entityManager->persist($city);
             $entityManager->flush();
             return $this->redirectToRoute('app_city');
@@ -212,6 +218,5 @@ class AdminController extends AbstractController
             "city" => $city,
             'cityForm' => $cityForm->createView()
         ]);
-
     }
 }
