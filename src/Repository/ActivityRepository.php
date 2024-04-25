@@ -53,7 +53,7 @@ class ActivityRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('a')
             ->andWhere('a.host = :user')
             ->setParameter('user', $user)
-            ->orderBy('a.startDateTime', 'DESC')
+            ->orderBy('a.startDatetime', 'DESC')
             ->getQuery()
             ->getResult();
     }
@@ -62,7 +62,7 @@ class ActivityRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('a')
             ->andWhere('a.state = 2')
-            ->orderBy('a.startDateTime', 'DESC')
+            ->orderBy('a.startDatetime', 'DESC')
             ->getQuery()
             ->getResult();
     }
@@ -70,7 +70,7 @@ class ActivityRepository extends ServiceEntityRepository
     public function findActivitiesBySearchFilter(SearchFilter $searchFilter, User $user)
     {
         $qb = $this->createQueryBuilder('a')
-            ->orderBy('a.startDateTime', 'DESC');
+            ->orderBy('a.startDatetime', 'DESC');
 
         if ($searchFilter->getCampus()) {
             $qb->andWhere('a.campus = :campus')
@@ -83,12 +83,12 @@ class ActivityRepository extends ServiceEntityRepository
         }
 
         if ($searchFilter->getStartDate()) {
-            $qb->andWhere('a.startDateTime >= :startDate')
+            $qb->andWhere('a.startDatetime >= :startDate')
                 ->setParameter('startDate', $searchFilter->getStartDate());
         }
 
         if ($searchFilter->getEndDate()) {
-            $qb->andWhere('a.startDateTime <= :endDate')
+            $qb->andWhere('a.startDatetime <= :endDate')
                 ->setParameter('endDate', $searchFilter->getEndDate());
         }
 

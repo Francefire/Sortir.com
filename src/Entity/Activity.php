@@ -20,7 +20,7 @@ class Activity
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $startDateTime = null;
+    private ?\DateTimeInterface $startDatetime = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     private ?\DateTimeInterface $duration = null;
@@ -36,7 +36,7 @@ class Activity
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?state $state = null;
+    private ?State $state = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
@@ -78,14 +78,14 @@ class Activity
         return $this;
     }
 
-    public function getStartDateTime(): ?\DateTimeInterface
+    public function getStartDatetime(): ?\DateTimeInterface
     {
-        return $this->startDateTime;
+        return $this->startDatetime;
     }
 
-    public function setStartDateTime(\DateTimeInterface $startDateTime): static
+    public function setStartDatetime(\DateTimeInterface $startDatetime): static
     {
-        $this->startDateTime = $startDateTime;
+        $this->startDatetime = $startDatetime;
 
         return $this;
     }
@@ -138,12 +138,12 @@ class Activity
         return $this;
     }
 
-    public function getState(): ?state
+    public function getState(): ?State
     {
         return $this->state;
     }
 
-    public function setState(?state $state): static
+    public function setState(?State $state): static
     {
         $this->state = $state;
 

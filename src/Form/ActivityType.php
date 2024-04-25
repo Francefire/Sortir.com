@@ -3,20 +3,12 @@
 namespace App\Form;
 
 use App\Entity\Activity;
-use App\Entity\Campus;
 use App\Entity\City;
 use App\Entity\Location;
-use App\Entity\state;
-use App\Entity\User;
-use App\Repository\LocationRepository;
-use Doctrine\DBAL\Types\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ActivityType extends AbstractType
@@ -27,7 +19,7 @@ class ActivityType extends AbstractType
             ->add('name',null, [
                 'label' => 'Nom de la sortie :'
             ])
-            ->add('startDateTime', null, [
+            ->add('startDatetime', null, [
                 'widget' => 'single_text',
                 'label' => 'Date et heure de la sortie :'
             ])
