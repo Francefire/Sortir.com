@@ -22,11 +22,11 @@ class EditActivityType extends AbstractType
             ->add('registerLimitDatetime', null, [
                 'widget' => 'single_text',
             ])
-            ->add('maxEntries')
+            ->add('maxParticipants')
             ->add('duration', null, [
                 'widget' => 'single_text',
             ])
-            ->add('tripInformations')
+            ->add('description')
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
                 'choice_label' => 'name',

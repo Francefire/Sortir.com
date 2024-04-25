@@ -4,11 +4,11 @@ Date de la sortie: {{ activity.startDatetime|date('d/m/Y') }}
 <br>
 Durée de la sortie : {{ activity.duration | date('H:i') }}
 <br>
-Description de la sortie: {{ activity.tripInformations }}
+Description de la sortie: {{ activity.description }}
 <br>
 Nombre de participants: {{ activity.participants|length }}
 <br>
-Nombre de participants maximum: {{ activity.maxEntries }}
+Nombre de participants maximum: {{ activity.maxParticipants }}
 <br>
 Lieu de la sortie: {{ activity.location.name }}
 <br>

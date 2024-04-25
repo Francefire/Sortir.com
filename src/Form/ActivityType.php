@@ -30,7 +30,7 @@ class ActivityType extends AbstractType
 
             ])
 
-            ->add('maxEntries', null, [
+            ->add('maxParticipants', null, [
                 'label' => 'Nombre de places :'
             ])
 
@@ -39,7 +39,7 @@ class ActivityType extends AbstractType
                 'label' => 'Durée :'
             ])
 
-            ->add('tripInformations', null, [
+            ->add('description', null, [
                 'label' => 'Description et infos :'
             ])
             ->add('city', EntityType::class, [
