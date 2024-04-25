@@ -108,11 +108,12 @@ class ActivityController extends AbstractController
     public function details(Activity $activity): Response
     {
         return $this->render('activity/details.html.twig', [
-            'activity' => $activity
+            'activity' => $activity,
+            'user' => $this->getUser()
         ]);
     }
 
-    #[Route('/entry/{id}', name: 'entry', methods: ['POST'])]
+    #[Route('/join/{id}', name: 'join', methods: ['POST'])]
     public function entry(Activity $activity, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
@@ -148,4 +149,20 @@ class ActivityController extends AbstractController
         }
         return $this->redirectToRoute('activity_details', ['id' => $activity->getId()]);
     }
+
+    #[Route('/leave/{id}', name: 'leave', methods: ['POST'])]
+    public function leave(Activity $activity, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+        if ($activity->getParticipants()->contains($user)) {
+            $this->addFlash('success', 'Vous avez annulé votre participation à la sortie');
+            $activity->removeParticipant($user);
+            $entityManager->persist($activity);
+            $entityManager->flush();
+        }else{
+            $this->addFlash('warning', 'Vous n\'êtes pas inscrit à cette sortie');
+        }
+        return $this->redirectToRoute('activity_details', ['id' => $activity->getId()]);
+    }
+
 }

@@ -8,9 +8,9 @@ class SearchFilter
     private ?string $search = null;
     private ?\DateTimeInterface $startDate = null;
     private ?\DateTimeInterface $endDate = null;
-    private ?bool $organizer = true;
-    private ?bool $registered = true;
-    private ?bool $notRegistered = true;
+    private ?bool $organizer = false;
+    private ?bool $registered = false;
+    private ?bool $notRegistered = false;
     private ?bool $finished = null;
 
     public function getCampus(): ?Campus
