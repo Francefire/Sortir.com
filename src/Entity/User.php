@@ -72,6 +72,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotNull]
     private ?Campus $campus = null;
 
+    #[ORM\Column(length: 256, nullable: true)]
+    private ?string $profilePictureFilename = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -242,4 +245,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getProfilePictureFilename(): ?string
+    {
+        return $this->profilePictureFilename;
+    }
+
+    public function setProfilePictureFilename(?string $profilePictureFilename): void
+    {
+        $this->profilePictureFilename = $profilePictureFilename;
+    }
+
 }
