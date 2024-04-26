@@ -16,10 +16,7 @@ class StateService
         $this->em = $em;
     }
 
-    /**
-     * @return mixed
-     */
-    private function getEm() : EntityManagerInterface
+    private function getEm(): EntityManagerInterface
     {
         return $this->em;
     }
@@ -31,8 +28,7 @@ class StateService
 
     public function getStates(): array
     {
-        if(empty($this->states))
-        {
+        if (empty($this->states)) {
             $this->states = $this->getRepository()->findAll();
         }
         return $this->states;
@@ -44,18 +40,17 @@ class StateService
         $now->setTimezone(new \DateTimeZone('Europe/Paris'));
         $states = $this->getStates();
 
-        if ($activity->getState()->getId() != $states[0]->getId()) {
-            if ($activity->getRegisterLimitDatetime() < $now) {
-                $activity->setState($states[2]);
-            }
-            if ($activity->getStartDatetime() < $now) {
-                $activity->setState($states[3]);
-            }
-            $activityEndTime = $activity->getStartDatetime()->getTimestamp() + $activity->getDuration()->getTimestamp();
-            if ($activityEndTime < $now->getTimestamp()) {
-                $activity->setState($states[4]);
-            }
+        if ($activity->getRegisterLimitDatetime() < $now) {
+            $activity->setState($states[2]);
         }
+        if ($activity->getStartDatetime() < $now) {
+            $activity->setState($states[3]);
+        }
+        $activityEndTime = $activity->getStartDatetime()->getTimestamp() + $activity->getDuration()->getTimestamp();
+        if ($activityEndTime < $now->getTimestamp()) {
+            $activity->setState($states[4]);
+        }
+
     }
 
     /**
@@ -76,8 +71,6 @@ class StateService
         }
         return $flashMessage;
     }
-
-
 
 
 }

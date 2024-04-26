@@ -13,6 +13,9 @@ class ActivityListener
     public function verifyState(Activity $activity, $args): void
     {
         $stateService = new StateService($args->getObjectManager());
-        $stateService->correctActivityState($activity);
+        if($activity->getState()->getId() != 1)
+        {
+            $stateService->correctActivityState($activity);
+        }
     }
 }
