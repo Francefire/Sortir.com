@@ -36,7 +36,7 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         return [
-            MenuItem::linkToRoute('Retourner sur le site' ,'fa fa-reply', 'app_home'),
+            MenuItem::linkToRoute('Retourner sur le site' ,'fa fa-reply', 'main_home'),
 
             MenuItem::linkToDashboard('Tableau de bord', 'fa fa-home'),
 

@@ -23,7 +23,7 @@ class UserCrudController extends AbstractCrudController
             ->setEntityLabelInSingular('Utilisateur');
 
     }
-    
+
     /*
     public function configureFields(string $pageName): iterable
     {
