@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/admin', name: 'app_')]
+#[Route('/oldadmin', name: 'app_')]
 class AdminController extends AbstractController
 {
     #[Route('', name: 'admin')]
