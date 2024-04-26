@@ -9,8 +9,8 @@ use App\Form\ActivityType;
 use App\Form\LocationType;
 use App\Form\SearchFilterType;
 use App\Repository\ActivityRepository;
-use App\Repository\StateRepository;
 use App\Repository\UserRepository;
+use App\Service\StateService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,9 +21,8 @@ use Symfony\Component\Routing\Attribute\Route;
 class ActivityController extends AbstractController
 {
     #[Route('/create', name: 'create')]
-    public function create(Request $request, EntityManagerInterface $entityManager, StateRepository $stateRepository): Response
+    public function create(Request $request, EntityManagerInterface $entityManager, StateService $stateService): Response
     {
-        $states = $stateRepository->findAll();
         $activity = new Activity();
         $location = new Location();
         $activityForm = $this->createForm(ActivityType::class, $activity);
@@ -41,14 +40,11 @@ class ActivityController extends AbstractController
         }
 
         $activityForm->handleRequest($request);
+
         if ($activityForm->isSubmitted() && $activityForm->isValid()) {
-            if ($activityForm->get('save')->isClicked()) {
-                $activity->setState($states[0]);
-                $this->addFlash('info', 'Activité enregistrée en brouillon');
-            } elseif ($activityForm->get('publish')->isClicked()) {
-                $activity->setState($states[1]);
-                $this->addFlash('info', 'Activité publiée');
-            }
+
+            $this->addFlash('success', $stateService->setCorrectState($activity, $activityForm));
+
             $activity->setCampus($this->getUser()->getCampus());
             $activity->setHost($this->getUser());
             $entityManager->persist($activity);
@@ -88,24 +84,15 @@ class ActivityController extends AbstractController
     }
 
     #[Route('/edit/{id}', name: 'edit')]
-    public function edit(Activity $activity, EntityManagerInterface $entityManager, ActivityRepository $activityRepository, StateRepository $stateRepository, Request $request): Response
+    public function edit(Activity $activity, EntityManagerInterface $entityManager, StateService $stateService , Request $request): Response
     {
-        $states = $stateRepository->findAll();
-        dump($activity);
-
         $editActivityForm = $this->createForm(ActivityType::class, $activity);
 
         $editActivityForm->handleRequest($request);
 
         if ($editActivityForm->isSubmitted() && $editActivityForm->isValid()) {
 
-            if ($editActivityForm->get('save')->isClicked()) {
-                $activity->setState($states[0]);
-                $this->addFlash('info', 'Activité enregistrée en brouillon');
-            } elseif ($editActivityForm->get('publish')->isClicked()) {
-                $activity->setState($states[1]);
-                $this->addFlash('info', 'Activité publiée');
-            }
+            $this->addFlash('info', $stateService->setCorrectState($activity, $editActivityForm));
             $entityManager->persist($activity);
             $entityManager->flush();
             $this->addFlash('success', 'Activité modifiée avec succès');
