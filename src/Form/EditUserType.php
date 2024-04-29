@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Campus;
 use App\Entity\User;
+use App\EventSubscriber\UserEditSubscriber;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -66,7 +67,8 @@ class EditUserType extends AbstractType
                         'mimeTypesMessage' => 'Veuillez télécharger une image valide',
                     ])
                 ],
-            ]);
+            ])
+            ->addEventSubscriber(new UserEditSubscriber());
     }
 
     public function configureOptions(OptionsResolver $resolver): void
