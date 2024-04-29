@@ -10,8 +10,9 @@ class FileService
 
     public function upload(UploadedFile $file): string
     {
-        $filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $fileName = $filename . '-' . uniqid() . '.' . $file->guessExtension();
+
+        $fileHash = md5_file($file->getPathname());
+        $fileName = $fileHash . '.' . $file->guessExtension();
         $file->move($this->getTargetDirectory(), $fileName);
 
         // TODO: Optimiser les images téléchargées

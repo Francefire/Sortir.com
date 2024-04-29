@@ -8,7 +8,6 @@ use App\Entity\User;
 use App\Form\EditUserType;
 use App\Repository\ActivityRepository;
 use App\Repository\UserRepository;
-use App\Service\FileService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,7 +25,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/user/edit/{id}', name: 'user_edit')]
-    public function edit(Request $request, FileService $fileService, EntityManagerInterface $entityManager, UserRepository $userRepository, UserPasswordHasherInterface $userPasswordHasher, User $user): Response
+    public function edit(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository, UserPasswordHasherInterface $userPasswordHasher, User $user): Response
     {
 
         if ($this->getUser() !== $user) {
@@ -40,12 +39,6 @@ class UserController extends AbstractController
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             if (!empty($user->getPlainPassword())) {
                 $user->setPassword($userPasswordHasher->hashPassword($user, $user->getPlainPassword()));
-            }
-
-            $pp = $editForm->get('profilePicture')->getData();
-            if ($pp) {
-                $ppFileName = $fileService->upload($pp);
-                $user->setProfilePictureFilename($ppFileName);
             }
 
             $entityManager->flush();
