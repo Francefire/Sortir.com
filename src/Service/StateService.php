@@ -66,6 +66,7 @@ class StateService
             $activity->setState($states[0]);
             $flashMessage = 'Activité enregistrée';
         } elseif ($activityForm->get('publish')->isClicked()) {
+            $activity->setState($states[1]);
             $this->correctActivityState($activity);
             $flashMessage = 'Activité publiée';
         }
