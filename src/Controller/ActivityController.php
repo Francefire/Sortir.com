@@ -60,6 +60,30 @@ class ActivityController extends AbstractController
         ]);
     }
 
+    #[Route('/cancel/{id}', name: 'cancel', methods: ['POST'])]
+    public function cancel(Activity $activity, EntityManagerInterface $entityManager, StateService $stateService): Response
+    {
+        //TODO : Gerer exceptions dans le cas ou l'user n'est pas l'organisateur
+
+        $activity->setState($stateService->getStates()[5]);
+        $entityManager->persist($activity);
+        $entityManager->flush();
+        $this->addFlash('success', 'Activité annulée avec succès');
+        return $this->redirectToRoute('activity_details', ['id' => $activity->getId()]);
+    }
+
+    #[Route('/publish/{id}', name: 'publish', methods: ['POST'])]
+    public function publish(Activity $activity, EntityManagerInterface $entityManager, StateService $stateService): Response
+    {
+        //TODO : Gerer exceptions ou le cas ou l'activité est deja publié ou annulé etc etc
+
+        $activity->setState($stateService->getStates()[1]);
+        $entityManager->persist($activity);
+        $entityManager->flush();
+        $this->addFlash('success', 'Activité publiée avec succès');
+        return $this->redirectToRoute('activity_details', ['id' => $activity->getId()]);
+    }
+
     #[Route('/list', name: 'list')]
     public function list(ActivityRepository $activityRepository, Request $request, UserRepository $userRepository): Response
     {
@@ -71,9 +95,17 @@ class ActivityController extends AbstractController
         if ($searchFilterForm->isSubmitted() && $searchFilterForm->isValid()) {
             $user = $userRepository->find($this->getUser());
             $activities = $activityRepository->findActivitiesBySearchFilter($searchFilter, $user);
+            if (!$searchFilter->getFinished()) {
+                $activities = array_merge($activityRepository->findCreatedNotPublishedActivities($user), $activities);
+            }
 
         } else {
-            $activities = $activityRepository->findPublishedActivity();
+            $user = $userRepository->find($this->getUser());
+            $defaultSearch = new SearchFilter();
+            $activities = $activityRepository->findActivitiesBySearchFilter($defaultSearch, $user);
+            if (!$searchFilter->getFinished()) {
+                $activities = array_merge($activityRepository->findCreatedNotPublishedActivities($user), $activities);
+            }
         }
 
         return $this->render('activity/list.html.twig', [
@@ -84,7 +116,7 @@ class ActivityController extends AbstractController
     }
 
     #[Route('/edit/{id}', name: 'edit')]
-    public function edit(Activity $activity, EntityManagerInterface $entityManager, StateService $stateService , Request $request): Response
+    public function edit(Activity $activity, EntityManagerInterface $entityManager, StateService $stateService, Request $request): Response
     {
         $editActivityForm = $this->createForm(ActivityType::class, $activity);
 

@@ -127,4 +127,14 @@ class ActivityRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findCreatedNotPublishedActivities(User $user){
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.host = :user')
+            ->andWhere('a.state = 1')
+            ->orderBy('a.startDatetime', 'DESC')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
+    }
 }
