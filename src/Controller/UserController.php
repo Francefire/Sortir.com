@@ -28,10 +28,10 @@ class UserController extends AbstractController
     public function edit(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository, UserPasswordHasherInterface $userPasswordHasher, User $user): Response
     {
 
-        if ($this->getUser() !== $user) {
+        /*if ($this->getUser() !== $user) {
             $this->addFlash('access_denied', 'Vous ne pouvez pas modifier le profil d\'un autre utilisateur');
             return $this->redirectToRoute('user_profile', ['id' => $user->getId()]);
-        }
+        }*/
 
         $editForm = $this->createForm(EditUserType::class, $user);
 
