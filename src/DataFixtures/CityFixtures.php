@@ -13,13 +13,29 @@ class CityFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $city = new City();
-        $city->setName('Nantes');
-        $city->setPostalCode('44000');
+        $city->setName('Ville imaginaire');
+        $city->setPostalCode('99999');
 
         $manager->persist($city);
 
-        $manager->flush();
-
         $this->addReference(self::CITY_REFERENCE, $city);
+
+        if (($handle = fopen('data/villes.csv', "r")) !== false) {
+            while (($data = fgetcsv($handle)) !== false) {
+                if ($data[0] === 'zip_code') {
+                    continue;
+                }
+
+                $city = new City();
+                $city->setPostalCode($data[0]);
+                $city->setName(ucwords($data[1]));
+
+                $manager->persist($city);
+            }
+
+            fclose($handle);
+        }
+
+        $manager->flush();
     }
 }
