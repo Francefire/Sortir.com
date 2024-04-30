@@ -7,7 +7,6 @@ use App\Entity\Campus;
 use App\Entity\City;
 use App\Entity\State;
 use App\Entity\User;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -20,9 +19,6 @@ class DashboardController extends AbstractDashboardController
     public function index(): Response
     {
         return $this->render('admin/dashboard.html.twig');
-
-
-
     }
 
     public function configureDashboard(): Dashboard
@@ -30,13 +26,12 @@ class DashboardController extends AbstractDashboardController
         return Dashboard::new()
             ->setTitle('Sortir.com - Administration')
             ->disableDarkMode();
-
     }
 
     public function configureMenuItems(): iterable
     {
         return [
-            MenuItem::linkToRoute('Retourner sur le site' ,'fa fa-reply', 'main_home'),
+            MenuItem::linkToRoute('Retourner sur le site', 'fa fa-reply', 'main_home'),
 
             MenuItem::linkToDashboard('Tableau de bord', 'fa fa-home'),
 

@@ -24,7 +24,6 @@ class UserCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInPlural('Utilisateurs')
             ->setEntityLabelInSingular('Utilisateur');
-
     }
 
     public function configureFields(string $pageName): iterable
@@ -37,10 +36,11 @@ class UserCrudController extends AbstractCrudController
             EmailField::new('email')->setLabel('Email'),
             TextField::new('lastname')->setLabel('Nom'),
             TextField::new('firstname')->setLabel('Prénom'),
-            AssociationField::new('campus')->setLabel('Campus')->onlyOnIndex(),
+            AssociationField::new('campus')->setLabel('Campus'),
             ArrayField::new('roles')->setLabel('Rôles'),
             BooleanField::new('administrator')->setLabel('Administrateur'),
             BooleanField::new('disabled')->setLabel('Désactivé'),
+            // ImageField::new('profilePicture')->setBasePath('uploads/profile'),
         ];
     }
 }
