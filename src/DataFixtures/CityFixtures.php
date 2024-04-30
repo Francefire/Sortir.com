@@ -20,6 +20,9 @@ class CityFixtures extends Fixture
 
         $this->addReference(self::CITY_REFERENCE, $city);
 
+        /*
+         * TODO: A tester
+         *
         if (($handle = fopen('data/villes.csv', "r")) !== false) {
             while (($data = fgetcsv($handle)) !== false) {
                 if ($data[0] === 'zip_code') {
@@ -35,6 +38,7 @@ class CityFixtures extends Fixture
 
             fclose($handle);
         }
+        */
 
         $manager->flush();
     }

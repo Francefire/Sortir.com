@@ -34,18 +34,6 @@ class Location
         return $this->id;
     }
 
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): static
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
     public function getStreet(): ?string
     {
         return $this->street;
@@ -90,6 +78,23 @@ class Location
     public function setCity(?City $city): static
     {
         $this->city = $city;
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getName();
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
 
         return $this;
     }
