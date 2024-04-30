@@ -10,14 +10,14 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class ActivityVoter extends Voter
 {
-    public const CREATE = 'ACTIVITY_CREATE';
     public const EDIT = 'ACTIVITY_EDIT';
-    public const VIEW = 'ACTIVITY_VIEW';
+    public const JOIN = 'ACTIVITY_JOIN';
+    public const LEAVE = 'ACTIVITY_LEAVE';
 
     protected function supports(string $attribute, mixed $subject): bool
     {
         // if the attribute isn't one we support, return false
-        if (!in_array($attribute, [self::CREATE, self::EDIT, self::VIEW])) {
+        if (!in_array($attribute, [self::EDIT, self::JOIN, self::LEAVE])) {
             return false;
         }
 
@@ -39,18 +39,35 @@ class ActivityVoter extends Voter
         }
 
         // ... (check conditions and return true to grant permission) ...
-        switch ($attribute) {
-            case self::EDIT:
-                return $this->canEdit($subject, $user);
-            case self::VIEW:
-                break;
-        }
+        return match ($attribute) {
+            self::EDIT => $this->canEdit($subject, $user),
+            self::JOIN => $this->canJoin($subject, $user),
+            self::LEAVE => $this->canLeave($subject, $user),
+            default => false,
+        };
 
-        return false;
     }
 
     private function canEdit(Activity $activity, User $user): bool
     {
-        return $user === $activity->getHost();
+        return $activity->getHost()->getId() === $user->getId();
+    }
+
+    private function canJoin(Activity $activity, User $user): bool
+    {
+        if ($activity->getHost()->getId() === $user->getId()) {
+            return false;
+        }
+
+        return !$activity->getParticipants()->contains($user);
+    }
+
+    private function canLeave(Activity $activity, User $user): bool
+    {
+        if ($activity->getHost()->getId() === $user->getId()) {
+            return false;
+        }
+
+        return $activity->getParticipants()->contains($user);
     }
 }

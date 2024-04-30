@@ -115,6 +115,7 @@ class ActivityController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ACTIVITY_JOIN', 'activity', 'user')]
     #[Route('/join/{id}', name: 'join', methods: ['POST'])]
     public function entry(Activity $activity, EntityManagerInterface $entityManager): Response
     {
@@ -149,9 +150,11 @@ class ActivityController extends AbstractController
             $entityManager->persist($activity);
             $entityManager->flush();
         }
+
         return $this->redirectToRoute('activity_details', ['id' => $activity->getId()]);
     }
 
+    #[IsGranted('ACTIVITY_LEAVE', 'activity')]
     #[Route('/leave/{id}', name: 'leave', methods: ['POST'])]
     public function leave(Activity $activity, EntityManagerInterface $entityManager): Response
     {
