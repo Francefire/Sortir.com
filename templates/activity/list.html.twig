@@ -1,58 +1,47 @@
 {% extends 'base.html.twig' %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" />
 
-{% block body %}
-    {{ form_start(searchFilterForm) }}
-    {{ form_widget(searchFilterForm) }}
-    {{ form_end(searchFilterForm) }}
+    <link rel="stylesheet" href="{{ asset('styles/activity_list/base.css') }}">
 
-    <h2>Liste des activités</h2>
-    <table class="table">
-        <tr>
-            <th>Nom de la sortie</th>
-            <th>Date de la sortie</th>
-            <th>Cloture</th>
-            <th>Inscrits / Places </th>
-            <th>Etat</th>
-            <th>Inscrit</th>
-            <th>Organisateur</th>
-            <th>Actions</th>
-        </tr>
-    {% for activity in activities %}
-        <tr>
-            <td>{{ activity.name }}</td>
-            <td>{{ activity.startDatetime|date('d/m/Y') }}</td>
-            <td>{{ activity.registerLimitDatetime|date('d/m/Y') }}</td>
-            <td>{{ activity.participants|length }} / {{ activity.maxParticipants }}</td>
-            <td>{{ activity.state.label }}</td>
-            <td>{{ app.user in activity.participants ? 'Oui' : 'Non' }}</td>
-            <td>{{ activity.host.firstname }} {{ activity.host.lastname|slice(0,1)|upper }}.</td>
-            <td style="display: inline-flex;align-items: center;">
-
-                <a href="{{ path('activity_details', {'id': activity.id}) }}" class="btn btn-link">Voir</a>
-                {% if activity.host == app.user %}
-                    |<a href="{{ path('activity_edit', {'id': activity.id}) }}" class="btn btn-link">Modifier</a>
-                    {% if activity.state.id == 1 %}
-                        |<a href="{# TODO : Creer la route pour publier une sortie #}">Publier</a>
-                    {% endif %}
-                {% endif %}
-                <form method="post">
-                {% if app.user in activity.participants %}
-                    |<button type="submit" formaction="{{ path('activity_leave', {'id': activity.id}) }}" class="btn btn-link">Se désinscrire</button>
-                {% else %}
-                    |<button type="submit" formaction="{{ path('activity_join', {'id': activity.id}) }}" class="btn btn-link">S'inscrire</button>
-                {% endif %}
-                </form>
-            </td>
-        </tr>
-
-    {% endfor %}
-    </table>
-
-<a href="{{ path('activity_create') }}" class="btn btn-primary">Créer une sortie</a>
 
 {% endblock %}
 
+{% block body %}
+
+    {% include('activity/include/search_filter.html.twig') %}
+    {{ activities|length }}
+        {% for activity in activities %}
+            {% include('activity/include/activity_card.html.twig') %}
+        {% endfor %}
+
+
+    <article class="pure-g activity-card placeholder">
+        <section class="pure-u-1-5 activity-img-container">
+            <img src="https://placehold.co/400" alt="activity image">
+        </section>
+        <section class="pure-u-1-5 activity-info-summary-container">
+            <h3>Titre de la sortie</h3>
+            <p>Date de la sortie</p>
+            <p>Cloture</p>
+            <p>Inscrits / Places</p>
+            <p>Etat</p>
+            <p>Inscrit</p>
+            <p>Organisateur</p>
+            <p>Actions</p>
+        </section>
+        <section class="pure-u-3-5 activity-main-container">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. A accusamus ad debitis eligendi suscipit! Asperiores atque deserunt dolore eligendi eos et eveniet exercitationem explicabo fuga laudantium molestias necessitatibus non quas saepe vel, velit veritatis voluptatem. Consectetur consequuntur, dolor ducimus, eaque expedita necessitatibus numquam pariatur, perferendis quibusdam quis repellendus voluptatibus? Autem commodi cum fugiat iste iusto neque ratione. Animi blanditiis consectetur cumque, debitis doloremque dolores esse facere ipsum laborum officia porro, quas ratione voluptate. Adipisci aliquam distinctio eaque iste, iure magni modi, molestiae necessitatibus odit quaerat quas sequi sunt totam ullam ut voluptate voluptatum? Fugit officia quasi quibusdam. Alias amet aperiam eum facilis iste, mollitia odio reprehenderit. Ab beatae consectetur dicta perspiciatis temporibus velit veniam, voluptatem. Accusantium aliquam architecto cumque debitis doloribus ea eaque eius inventore iste minima molestias nam nihil nobis officia perspiciatis quaerat, ratione recusandae reprehenderit similique tempore temporibus totam unde voluptate? Accusamus ipsam iusto laborum laudantium magnam odit.
+        </section>
+    </article>
+
+
+    <a href="{{ path('activity_create') }}" class="btn btn-primary">Créer une sortie</a>
+    <script src="https://cdn.tailwindcss.com"></script>
+{% endblock %}
+
 {% block title %}
-{{ parent() }} - Liste des sorties
+    {{ parent() }} - Liste des sorties
 {% endblock %}
 

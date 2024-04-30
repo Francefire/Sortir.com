@@ -1,0 +1,23 @@
+
+<article class="pure-g activity-card">
+    <section class="pure-u-1-5 activity-img-container" style="background-image: url(https://placehold.co/400x600);">
+    </section>
+    <section class="pure-u-1-5 activity-info-summary-container">
+        <h3>{{ activity.name }}</h3>
+        <p class="activity-state-label">{{ activity.state.label }}</p>
+        <p>{{ activity.startDatetime|date('d/m/Y') }}</p>
+        <p>{{ activity.registerLimitDatetime|date('d/m/Y') }}</p>
+        <p>{{ activity.participants|length }} / {{ activity.maxParticipants }}</p>
+        <p>Inscrit ? {{ app.user in activity.participants ? 'Oui' : 'Non' }}</p>
+        <p>{{ activity.host.firstname }} {{ activity.host.lastname|slice(0,1)|upper }}.</p>
+        <details>
+            <summary>Actions :</summary>
+            <section class="action-container">{{ include('activity/include/activity_actions.html.twig') }}</section>
+        </details>
+    </section>
+    <section class="pure-u-3-5 activity-main-container">
+        <p>
+            {{ activity.description }}
+        </p>
+    </section>
+</article>

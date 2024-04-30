@@ -1,0 +1,90 @@
+:root {
+    --color-one: #CFDBD5;
+    --color-two: #E8EDDF;
+    --color-three: #F5CB5C;
+    --color-three-darker : #F3C33F;
+    --color-four: #242423;
+    --color-five: #333533;
+    --font-family: 'Inter', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--font-family);
+}
+
+body {
+    background-color: var(--color-two);
+    color: var(--color-five);
+}
+
+a {
+    color: var(--color-five);
+    text-decoration: none;
+}
+
+li {
+    list-style: none;
+}
+
+header {
+    display: flex;
+    padding: 3rem 5rem 0;
+    color: var(--color-four);
+}
+
+header a p {
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+header nav {
+    align-items: center;
+    margin-left: auto;
+    display: flex;
+}
+
+header nav a {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-left: 2em;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+main {
+    min-height: 100vh;
+    margin-top: 2em;
+    margin-inline: auto;
+}
+
+footer {
+    background-color: var(--color-five);
+    color: var(--color-two);
+    padding: 2em;
+    text-align: center;
+    width: auto;
+}
+
+footer p {
+    margin-top: 1em;
+}
+
+footer a {
+    color: var(--color-two);
+}
+
+nav a:hover, header a:hover{
+    color: var(--color-three-darker);
+    text-decoration: underline;
+    text-decoration-thickness: 0.2em;
+}
+
+.accent {
+    color: var(--color-three-darker);
+}

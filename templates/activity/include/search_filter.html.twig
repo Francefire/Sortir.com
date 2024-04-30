@@ -1,0 +1,22 @@
+
+{{ form_start(searchFilterForm) }}
+<div class="pure-g filter-container">
+    <div class="pure-u-2-8 campus-select-container">
+        {{ form_widget(searchFilterForm.campus) }}
+    </div>
+    <div class="pure-u-1-8 dateFilter">
+        {{ form_row(searchFilterForm.startDate) }}
+        {{ form_row(searchFilterForm.endDate) }}
+    </div>
+    <div class="pure-u-2-8 checkbox-container">
+        {{ form_row(searchFilterForm.organizer) }}
+        {{ form_row(searchFilterForm.registered) }}
+        {{ form_row(searchFilterForm.notRegistered) }}
+        {{ form_row(searchFilterForm.finished) }}
+    </div>
+    <div class="pure-u-2-8 search-container">
+        {{ form_widget(searchFilterForm.search) }}
+        {{ form_widget(searchFilterForm.submit) }}
+    </div>
+</div>
+{{ form_end(searchFilterForm) }}

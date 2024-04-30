@@ -1,0 +1,27 @@
+<a href="{{ path('activity_details', {'id': activity.id}) }}" class="action-btn">Voir</a>
+{% if activity.host == app.user %}
+    |<a href="{{ path('activity_edit', {'id': activity.id}) }}" class="action-btn">Modifier</a>
+    {% if activity.state.id == 1 %}
+        |
+        <form method="post">
+            <button type="submit" formaction="{{ path('activity_publish', {'id': activity.id}) }}"
+                    class="action-btn">Publier
+            </button>
+        </form>
+    {% endif %}
+{% endif %}
+{% if activity.state.id == 2 %}
+    <form method="post">
+        {% if app.user in activity.participants %}
+            |
+            <button type="submit" formaction="{{ path('activity_leave', {'id': activity.id}) }}"
+                    class="action-btn">Se désinscrire
+            </button>
+        {% else %}
+            |
+            <button type="submit" formaction="{{ path('activity_join', {'id': activity.id}) }}"
+                    class="action-btn">S'inscrire
+            </button>
+        {% endif %}
+    </form>
+{% endif %}
