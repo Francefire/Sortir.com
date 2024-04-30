@@ -80,18 +80,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->id;
     }
 
-    public function getUsername(): ?string
-    {
-        return $this->username;
-    }
-
-    public function setUsername(string $username): static
-    {
-        $this->username = $username;
-
-        return $this;
-    }
-
     /**
      * A visual identifier that represents this user.
      *
@@ -256,4 +244,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->profilePictureFilename = $profilePictureFilename;
     }
 
+    public function __toString(): string
+    {
+        return $this->getUsername();
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(string $username): static
+    {
+        $this->username = $username;
+
+        return $this;
+    }
 }
