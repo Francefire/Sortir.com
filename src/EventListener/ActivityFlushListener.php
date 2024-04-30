@@ -8,7 +8,7 @@ use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Events;
 
 #[AsEntityListener(event: Events::preFlush, method: 'verifyState' ,entity: Activity::class)]
-class ActivityListener
+class ActivityFlushListener
 {
     public function verifyState(Activity $activity, $args): void
     {

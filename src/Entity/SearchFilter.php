@@ -2,16 +2,21 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 class SearchFilter
 {
     private ?Campus $campus = null;
+
     private ?string $search = null;
+    #[Assert\DateTime()]
     private ?\DateTimeInterface $startDate = null;
+    #[Assert\DateTime()]
     private ?\DateTimeInterface $endDate = null;
     private ?bool $organizer = false;
     private ?bool $registered = false;
     private ?bool $notRegistered = false;
-    private ?bool $finished = null;
+    private ?bool $finished = false;
 
     public function getCampus(): ?Campus
     {

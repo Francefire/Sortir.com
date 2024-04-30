@@ -13,6 +13,11 @@
             <button type="submit">S'inscrire</button>
         </form>
     {% endif %}
+    {% if user == activity.host %}
+        <form action="{{ path('activity_cancel', {'id': activity.id}) }}" method="POST">
+            <button type="submit">Annuler la sortie</button>
+        </form>
+    {% endif %}
     <h2>Liste des participants</h2>
     <table>
         <tr>
