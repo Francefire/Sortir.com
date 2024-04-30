@@ -31,7 +31,7 @@ class UserCrudController extends AbstractCrudController
         return [
             IdField::new('id')->setLabel('Identifiant')->hideOnForm(),
             TextField::new('username')->setLabel('Nom d\'utilisateur'),
-            TextField::new('plainPassword')->setLabel('Mot de passe')->onlyOnForms(),
+            TextField::new('password')->setLabel('Mot de passe')->onlyOnForms(),
             TextField::new('phone')->setLabel('Numéro de téléphone'),
             EmailField::new('email')->setLabel('Email'),
             TextField::new('lastname')->setLabel('Nom'),
