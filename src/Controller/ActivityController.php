@@ -6,168 +6,122 @@ use App\Entity\Activity;
 use App\Entity\Location;
 use App\Entity\SearchFilter;
 use App\Form\ActivityType;
+use App\Form\EditActivityType;
 use App\Form\LocationType;
-use App\Form\SearchFilterType;
 use App\Repository\ActivityRepository;
-use App\Repository\UserRepository;
-use App\Service\StateService;
+use App\Service\ActivityService;
 use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Form\Type\FiltersFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/activity', name: 'activity_')]
+#[Route('/activities', name: 'activities_')]
 class ActivityController extends AbstractController
 {
-    #[Route('/create', name: 'create')]
-    public function create(Request $request, EntityManagerInterface $entityManager, StateService $stateService): Response
+    #[Route('', name: '', methods: ['GET'])]
+    public function activities(ActivityRepository $activityRepository): Response
     {
-        $activity = new Activity();
-        $location = new Location();
-        $activityForm = $this->createForm(ActivityType::class, $activity);
-        $locationForm = $this->createForm(LocationType::class, $location);
+        $filters = new SearchFilter();
+        $filtersForm = $this->createForm(FiltersFormType::class, $filters);
 
+        $activities = $activityRepository->findAll();
+
+        return $this->render('activities/list.html.twig', [
+            'filtersForm' => $filtersForm->createView(),
+            'activities' => $activities,
+        ]);
+    }
+
+    #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
+    public function create(Request $request, ActivityService $activityService, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+        $location = new Location();
+        $activity = new Activity();
+
+        $locationForm = $this->createForm(LocationType::class, $location);
+        $createForm = $this->createForm(ActivityType::class, $activity);
 
         $locationForm->handleRequest($request);
-        if ($locationForm->get('add')->isClicked()) {
-            if ($locationForm->isSubmitted() && $locationForm->isValid()) {
-                $entityManager->persist($location);
-                $entityManager->flush();
-                $this->addFlash('success', 'Lieu créé avec succès');
-                //TODO : Seul probleme, si l'utilisateur ajoute un lieu apres avoir rempli le formulaire d'activité, il perd les données du formulaire d'activité
-            }
-        }
 
-        $activityForm->handleRequest($request);
-
-        if ($activityForm->isSubmitted() && $activityForm->isValid()) {
-
-            $this->addFlash('success', $stateService->setCorrectState($activity, $activityForm));
-
-            $activity->setCampus($this->getUser()->getCampus());
-            $activity->setHost($this->getUser());
-            $entityManager->persist($activity);
+        if ($locationForm->isSubmitted() && $locationForm->isValid()) {
+            $entityManager->persist($location);
             $entityManager->flush();
-            $this->addFlash('success', 'Activité sauvegardée avec succès');
 
-            return $this->redirectToRoute('activity_details', ['id' => $activity->getId()]);
+            $this->addFlash('success', 'Location created!');
+            return $this->render('activities/create.html.twig', [
+                'locationForm' => $locationForm->createView(),
+                'createForm' => $createForm->createView(),
+            ]);
         }
 
-        return $this->render('activity/create.html.twig', [
-            'activityForm' => $activityForm->createView(),
-            'locationForm' => $locationForm->createView()
+        $createForm->handleRequest($request);
+
+        if ($createForm->isSubmitted() && $createForm->isValid()) {
+            $stateId = $createForm->get('save')->isClicked() ? 0 : 1;
+
+            $activityService->createActivity($activity, $user, $stateId);
+
+            $this->addFlash('success', 'Activity created!');
+            return $this->redirectToRoute('activities_details', ['id' => $activity->getId()]);
+        }
+
+        return $this->render('activities/create.html.twig', [
+            'locationForm' => $locationForm->createView(),
+            'createForm' => $createForm->createView(),
         ]);
     }
 
-    #[Route('/list', name: 'list')]
-    public function list(ActivityRepository $activityRepository, Request $request, UserRepository $userRepository): Response
-    {
-        $searchFilter = new SearchFilter();
-        $searchFilterForm = $this->createForm(SearchFilterType::class, $searchFilter);
-
-        $searchFilterForm->handleRequest($request);
-
-        if ($searchFilterForm->isSubmitted() && $searchFilterForm->isValid()) {
-            $user = $userRepository->find($this->getUser());
-            $activities = $activityRepository->findActivitiesBySearchFilter($searchFilter, $user);
-
-        } else {
-            $activities = $activityRepository->findPublishedActivity();
-        }
-
-        return $this->render('activity/list.html.twig', [
-            'searchFilter' => $searchFilter,
-            'searchFilterForm' => $searchFilterForm->createView(),
-            'activities' => $activities
-        ]);
-    }
-
-    #[IsGranted('ACTIVITY_EDIT', 'activity')]
-    #[Route('/edit/{id}', name: 'edit')]
-    public function edit(Activity $activity, EntityManagerInterface $entityManager, StateService $stateService, Request $request): Response
-    {
-        $editActivityForm = $this->createForm(ActivityType::class, $activity);
-
-        $editActivityForm->handleRequest($request);
-
-        if ($editActivityForm->isSubmitted() && $editActivityForm->isValid()) {
-
-            $this->addFlash('info', $stateService->setCorrectState($activity, $editActivityForm));
-            $entityManager->persist($activity);
-            $entityManager->flush();
-            $this->addFlash('success', 'Activité modifiée avec succès');
-        }
-
-        return $this->render('activity/edit.html.twig', [
-            'activity' => $activity,
-            'editActivityForm' => $editActivityForm->createView()
-        ]);
-    }
-
-    #[Route('/details/{id}', name: 'details')]
+    #[Route('/{id}', name: 'details', methods: ['GET'])]
     public function details(Activity $activity): Response
     {
-        return $this->render('activity/details.html.twig', [
+        return $this->render('activities/details.html.twig', [
             'activity' => $activity,
-            'user' => $this->getUser()
+            'user' => $this->getUser(),
         ]);
     }
 
-    #[IsGranted('ACTIVITY_JOIN', 'activity', 'user')]
-    #[Route('/join/{id}', name: 'join', methods: ['POST'])]
-    public function entry(Activity $activity, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Activity $activity, ActivityService $activityService): Response
+    {
+        $editForm = $this->createForm(EditActivityType::class, $activity);
+        $editForm->handleRequest($request);
+
+        if ($editForm->isSubmitted() && $editForm->isValid()) {
+            $stateId = $editForm->get('save')->isClicked() ? 0 : 1;
+
+            $activityService->editActivity($activity, $stateId);
+
+            $this->addFlash('success', 'Activity edited!');
+            return $this->redirectToRoute('activities_details', ['id' => $activity->getId()]);
+        }
+
+        return $this->render('activities/edit.html.twig', [
+            'editForm' => $editForm->createView(),
+        ]);
+    }
+
+    #[Route('/{id}/join', name: 'join', methods: ['POST'])]
+    public function join(Activity $activity, ActivityService $activityService): Response
     {
         $user = $this->getUser();
 
-        //TODO : Utiliser un service pour gérer les inscriptions
-        if ($activity->getParticipants()->contains($user)) {
-            $this->addFlash('warning', 'Vous êtes déjà inscrit à cette sortie');
-        } else if ($activity->getMaxParticipants() <= count($activity->getParticipants())) {
-            $this->addFlash('warning', 'La sortie est complète');
-        } else if ($activity->getState()->getId() != 2) {
-            switch ($activity->getState()->getId()) {
-                case 1:
-                    $this->addFlash('warning', 'La sortie n\'est pas encore ouverte');
-                    break;
-                case 3:
-                    $this->addFlash('warning', 'La sortie est clôturée');
-                    break;
-                case 4:
-                    $this->addFlash('warning', 'La sortie à deja commencée');
-                    break;
-                case 5:
-                    $this->addFlash('warning', 'La sortie est terminée');
-                    break;
-                case 6:
-                    $this->addFlash('warning', 'La sortie est annulée');
-                    break;
-            }
-        } else {
-            $this->addFlash('success', 'Vous êtes inscrit à la sortie');
-            $activity->addParticipant($user);
-            $entityManager->persist($activity);
-            $entityManager->flush();
-        }
+        $activityService->joinActivity($activity, $user);
 
-        return $this->redirectToRoute('activity_details', ['id' => $activity->getId()]);
+        $this->addFlash('success', 'Activity joined!');
+        return $this->redirectToRoute('activities_details', ['id' => $activity->getId()]);
     }
 
-    #[IsGranted('ACTIVITY_LEAVE', 'activity')]
-    #[Route('/leave/{id}', name: 'leave', methods: ['POST'])]
-    public function leave(Activity $activity, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}/leave', name: 'leave', methods: ['POST'])]
+    public function leave(Activity $activity, ActivityService $activityService): Response
     {
         $user = $this->getUser();
-        if ($activity->getParticipants()->contains($user)) {
-            $this->addFlash('success', 'Vous avez annulé votre participation à la sortie');
-            $activity->removeParticipant($user);
-            $entityManager->persist($activity);
-            $entityManager->flush();
-        } else {
-            $this->addFlash('warning', 'Vous n\'êtes pas inscrit à cette sortie');
-        }
-        return $this->redirectToRoute('activity_details', ['id' => $activity->getId()]);
-    }
 
+        $activityService->leaveActivity($activity, $user);
+
+        $this->addFlash('success', 'Activity left!');
+        return $this->redirectToRoute('activities_details', ['id' => $activity->getId()]);
+    }
 }

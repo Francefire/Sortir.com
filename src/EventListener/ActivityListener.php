@@ -3,19 +3,21 @@
 namespace App\EventListener;
 
 use App\Entity\Activity;
-use App\Service\StateService;
+use App\Service\ActivityService;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Events;
 
-#[AsEntityListener(event: Events::preFlush, method: 'verifyState' ,entity: Activity::class)]
-class ActivityListener
+#[AsEntityListener(event: Events::postLoad, method: 'onPostLoad', entity: Activity::class)]
+final class ActivityListener
 {
-    public function verifyState(Activity $activity, $args): void
+    public function __construct(
+        private readonly ActivityService $activityService,
+    )
     {
-        $stateService = new StateService($args->getObjectManager());
-        if($activity->getState()->getId() != 1)
-        {
-            $stateService->correctActivityState($activity);
-        }
+    }
+
+    public function onPostLoad(Activity $activity): void
+    {
+        $this->activityService->updateActivity($activity);
     }
 }

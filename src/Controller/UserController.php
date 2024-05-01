@@ -21,7 +21,6 @@ class UserController extends AbstractController
     #[Route('/user/profile/{id}', name: 'user_profile')]
     public function profile(UserRepository $userRepository, User $user, int $id): Response
     {
-        dump($user);
         return $this->render('user/profile.html.twig', compact('user', 'id'));
     }
 
@@ -53,7 +52,7 @@ class UserController extends AbstractController
     public function activity(User $user, ActivityRepository $activityRepository): Response
     {
         $userActivity = $activityRepository->findActivityByUser($user);
-        dump($userActivity);
+
         return $this->render('user/activity.html.twig', compact('userActivity'));
     }
 }
