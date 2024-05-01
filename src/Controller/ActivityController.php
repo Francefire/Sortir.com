@@ -102,7 +102,7 @@ class ActivityController extends AbstractController
         } else {
             $user = $userRepository->find($this->getUser());
             $defaultSearch = new SearchFilter();
-            $activities = $activityRepository->findActivitiesBySearchFilter($defaultSearch, $user);
+            $activities = $activityRepository->findAll();//TODO: A changer
             if (!$searchFilter->getFinished()) {
                 $activities = array_merge($activityRepository->findCreatedNotPublishedActivities($user), $activities);
             }

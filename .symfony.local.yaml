@@ -1,0 +1,5 @@
+workers:
+  messenger_consume_async:
+    cmd: [ 'symfony', 'console', 'messenger:consume', 'async' ]
+  tailwind:
+    cmd: [ 'symfony', 'console', 'tailwind:build', '--watch' ]
