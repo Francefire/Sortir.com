@@ -31,6 +31,8 @@
 Renommer le fichier `.env.example` en `.env` et modifier les lignes suivantes avec vos valeurs
 
 ```
+APP_ENV=
+APP_SECRET=
 DATABASE_URL=
 MESSENGER_TRANSPORT_DSN=
 MAILER_DSN=
