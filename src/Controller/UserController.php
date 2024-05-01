@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class UserController extends AbstractController
 {
@@ -24,15 +25,10 @@ class UserController extends AbstractController
         return $this->render('user/profile.html.twig', compact('user', 'id'));
     }
 
+    #[IsGranted('USER_EDIT', 'user')]
     #[Route('/user/edit/{id}', name: 'user_edit')]
-    public function edit(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository, UserPasswordHasherInterface $userPasswordHasher, User $user): Response
+    public function edit(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher, User $user): Response
     {
-
-        if ($this->getUser() !== $user) {
-            $this->addFlash('access_denied', 'Vous ne pouvez pas modifier le profil d\'un autre utilisateur');
-            return $this->redirectToRoute('user_profile', ['id' => $user->getId()]);
-        }
-
         $editForm = $this->createForm(EditUserType::class, $user);
 
         $editForm->handleRequest($request);

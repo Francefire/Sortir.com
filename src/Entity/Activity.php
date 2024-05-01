@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ActivityRepository;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -20,13 +21,13 @@ class Activity
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $startDatetime = null;
+    private ?DateTimeInterface $startDatetime = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
-    private ?\DateTimeInterface $duration = null;
+    private ?DateTimeInterface $duration = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $registerLimitDatetime = null;
+    private ?DateTimeInterface $registerLimitDatetime = null;
 
     #[ORM\Column]
     private ?int $maxParticipants = null;
@@ -53,7 +54,7 @@ class Activity
     /**
      * @var Collection<int, User>
      */
-    #[ORM\ManyToMany(targetEntity: User::class)]
+    #[ORM\ManyToMany(targetEntity: User::class, fetch: "EAGER")]
     private Collection $participants;
 
     public function __construct()
@@ -78,36 +79,36 @@ class Activity
         return $this;
     }
 
-    public function getStartDatetime(): ?\DateTimeInterface
+    public function getStartDatetime(): ?DateTimeInterface
     {
         return $this->startDatetime;
     }
 
-    public function setStartDatetime(\DateTimeInterface $startDatetime): static
+    public function setStartDatetime(DateTimeInterface $startDatetime): static
     {
         $this->startDatetime = $startDatetime;
 
         return $this;
     }
 
-    public function getDuration(): ?\DateTimeInterface
+    public function getDuration(): ?DateTimeInterface
     {
         return $this->duration;
     }
 
-    public function setDuration(\DateTimeInterface $duration): static
+    public function setDuration(DateTimeInterface $duration): static
     {
         $this->duration = $duration;
 
         return $this;
     }
 
-    public function getRegisterLimitDatetime(): ?\DateTimeInterface
+    public function getRegisterLimitDatetime(): ?DateTimeInterface
     {
         return $this->registerLimitDatetime;
     }
 
-    public function setRegisterLimitDatetime(\DateTimeInterface $registerLimitDatetime): static
+    public function setRegisterLimitDatetime(DateTimeInterface $registerLimitDatetime): static
     {
         $this->registerLimitDatetime = $registerLimitDatetime;
 

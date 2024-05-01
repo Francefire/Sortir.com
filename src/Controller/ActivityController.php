@@ -16,6 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/activity', name: 'activity_')]
 class ActivityController extends AbstractController
@@ -83,8 +84,9 @@ class ActivityController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ACTIVITY_EDIT', 'activity')]
     #[Route('/edit/{id}', name: 'edit')]
-    public function edit(Activity $activity, EntityManagerInterface $entityManager, StateService $stateService , Request $request): Response
+    public function edit(Activity $activity, EntityManagerInterface $entityManager, StateService $stateService, Request $request): Response
     {
         $editActivityForm = $this->createForm(ActivityType::class, $activity);
 
@@ -113,6 +115,7 @@ class ActivityController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ACTIVITY_JOIN', 'activity', 'user')]
     #[Route('/join/{id}', name: 'join', methods: ['POST'])]
     public function entry(Activity $activity, EntityManagerInterface $entityManager): Response
     {
@@ -147,9 +150,11 @@ class ActivityController extends AbstractController
             $entityManager->persist($activity);
             $entityManager->flush();
         }
+
         return $this->redirectToRoute('activity_details', ['id' => $activity->getId()]);
     }
 
+    #[IsGranted('ACTIVITY_LEAVE', 'activity')]
     #[Route('/leave/{id}', name: 'leave', methods: ['POST'])]
     public function leave(Activity $activity, EntityManagerInterface $entityManager): Response
     {
