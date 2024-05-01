@@ -74,7 +74,7 @@ class ActivityController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'details', methods: ['GET'])]
+    #[Route('/{id}', name: 'details', requirements: ['page' => '\d+'], methods: ['GET'])]
     public function details(Activity $activity): Response
     {
         return $this->render('activities/details.html.twig', [
@@ -83,7 +83,7 @@ class ActivityController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'edit', requirements: ['page' => '\d+'], methods: ['GET', 'POST'])]
     public function edit(Request $request, Activity $activity, ActivityService $activityService): Response
     {
         $editForm = $this->createForm(EditActivityType::class, $activity);
@@ -103,7 +103,7 @@ class ActivityController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/join', name: 'join', methods: ['POST'])]
+    #[Route('/{id}/join', name: 'join', requirements: ['page' => '\d+'], methods: ['POST'])]
     public function join(Activity $activity, ActivityService $activityService): Response
     {
         $user = $this->getUser();
@@ -114,7 +114,7 @@ class ActivityController extends AbstractController
         return $this->redirectToRoute('activities_details', ['id' => $activity->getId()]);
     }
 
-    #[Route('/{id}/leave', name: 'leave', methods: ['POST'])]
+    #[Route('/{id}/leave', name: 'leave', requirements: ['page' => '\d+'], methods: ['POST'])]
     public function leave(Activity $activity, ActivityService $activityService): Response
     {
         $user = $this->getUser();
