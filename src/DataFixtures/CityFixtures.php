@@ -13,7 +13,7 @@ class CityFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $city = new City();
-        $city->setName('Ville imaginaire');
+        $city->setName('Ville Imaginaire');
         $city->setPostalCode('99999');
 
         $manager->persist($city);
