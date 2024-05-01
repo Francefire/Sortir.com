@@ -6,31 +6,39 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
-{#
+
+    {#
     <link rel="stylesheet" href="{{ asset('styles/base.css') }}">
     @TODO: Add favicon
     <link rel="stylesheet" href="{{ asset('styles/form.css') }}">
-#}
-    {% block stylesheets %}{% endblock %}
+    #}
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
+    {% endblock %}
 </head>
-<body class="">
+<body class="font-inter bg-palette-light-light text-black min-h-screen flex flex-col">
 <header>
-    <a href="/">
-        <p class="">SORTIR.</p>
-        <p>COM</p>
-    </a>
-    <nav>
-        <a href="{{ path('activity_list') }}" class="{% if 'list' in app.request.pathInfo%}{#TODO: Current page styling#}{% endif %}">Accueil</a>
-        {% if app.user %}
-            <a href="{{ path('user_profile', {'id': app.user.id}) }}" class="{% if 'profile' in app.request.pathInfo%}{#TODO: Current page styling#}{% endif %}">Mon Profil</a>
-            <a href="{{ path('app_logout') }}">Se Déconnecter</a>
-        {% else %}
-            <a href="{{ path('app_login') }}">Se Connecter</a>
-        {% endif %}
+    <nav class="flex justify-between items-center w-full p-6">
+        <div>
+            <a href="/" class="text-4xl font-bold text-left hover:text-palette-accent-dark">
+                <p>SORTIR.</p>
+                <p>COM</p>
+            </a>
+        </div>
+        <div class="font-bold space-x-4 text-xl decoration-4">
+            <a href="{{ path('activity_list') }}"
+               class="{% if 'list' in app.request.pathInfo %}text-palette-accent-dark{% endif %} hover:underline hover:text-palette-accent-dark">Accueil</a>
+            {% if app.user %}
+                <a href="{{ path('user_profile', {'id': app.user.id}) }}"
+                   class="{% if 'profile' in app.request.pathInfo %}text-palette-accent-dark{% endif %} hover:underline hover:text-palette-accent-dark">Mon Profil</a>
+                <a href="{{ path('app_logout') }}" class="hover:underline hover:text-palette-accent-dark">Se Déconnecter</a>
+            {% else %}
+                <a href="{{ path('app_login') }}" class="hover:underline hover:text-palette-accent-dark">Se Connecter</a>
+            {% endif %}
+        </div>
     </nav>
 </header>
-<main>
+<main class="">
     {% for messages in app.flashes %}
         {% for message in messages %}
             <div>
@@ -40,7 +48,7 @@
     {% endfor %}
     {% block body %}{% endblock %}
 </main>
-<footer>
+<footer class="bg-palette-dark-dark font-medium text-palette-accent-light w-full flex flex-row-reverse justify-between items-center px-4 p-6 mt-auto">
     <nav>
         <a href="{{ path('main_home') }}">Accueil</a>
         <a href="#">?????</a>

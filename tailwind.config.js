@@ -5,17 +5,22 @@ module.exports = {
         "./templates/**/*.html.twig",
     ],
     theme: {
+        colors: {
+            'color-one': '#CFDBD5',
+            'color-two': '#E8EDDF',
+            'color-three': '#F5CB5C',
+            'color-three-darker': '#F3C33F',
+            'color-four': '#242423',
+            'color-five': '#333533',
+        },
         extend: {
-            fontFamily: {
-                inter: ['Inter'],
-            },
-            color: {
-                'white': '#CFDBD5',
-                'white-green': '#E8EDDF',
-                'yellow': '#F5CB5C',
-                'yellow-darker': '#F3C33F',
-                'darkest': '#242423',
-                'gray-dark': '#333533',
+            colors: {
+                'palette-light-dark': '#CFDBD5',
+                'palette-light-light': '#E8EDDF',
+                'palette-accent-light': '#F5CB5C',
+                'palette-accent-dark': '#F3C33F',
+                'palette-dark-dark': '#242423',
+                'palette-dark-light': '#333533',
 
                 'color-one': '#CFDBD5',
                 'color-two': '#E8EDDF',
@@ -24,6 +29,9 @@ module.exports = {
                 'color-four': '#242423',
                 'color-five': '#333533',
 
+            },
+            fontFamily: {
+                inter: ['Inter'],
             }
         },
     },
