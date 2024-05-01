@@ -8,10 +8,10 @@ use App\Entity\SearchFilter;
 use App\Form\ActivityType;
 use App\Form\EditActivityType;
 use App\Form\LocationType;
+use App\Form\SearchFilterType;
 use App\Repository\ActivityRepository;
 use App\Service\ActivityService;
 use Doctrine\ORM\EntityManagerInterface;
-use EasyCorp\Bundle\EasyAdminBundle\Form\Type\FiltersFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,13 +20,21 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/activities', name: 'activities_')]
 class ActivityController extends AbstractController
 {
-    #[Route('', name: '', methods: ['GET'])]
-    public function activities(ActivityRepository $activityRepository): Response
+    #[Route('', name: '', methods: ['GET', 'POST'])]
+    public function activities(Request $request, ActivityRepository $activityRepository): Response
     {
-        $filters = new SearchFilter();
-        $filtersForm = $this->createForm(FiltersFormType::class, $filters);
+        $user = $this->getUser();
 
-        $activities = $activityRepository->findAll();
+        $searchFilter = new SearchFilter();
+        $filtersForm = $this->createForm(SearchFilterType::class, $searchFilter);
+
+        $filtersForm->handleRequest($request);
+
+        if ($filtersForm->isSubmitted() && $filtersForm->isValid()) {
+            $activities = $activityRepository->findActivitiesBySearchFilter($searchFilter, $user);
+        } else {
+            $activities = $activityRepository->findAll();
+        }
 
         return $this->render('activities/list.html.twig', [
             'filtersForm' => $filtersForm->createView(),
