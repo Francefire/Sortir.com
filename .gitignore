@@ -9,7 +9,7 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
-composer.lock
+/composer.lock
 ###> phpunit/phpunit ###
 /phpunit.xml
 .phpunit.result.cache
