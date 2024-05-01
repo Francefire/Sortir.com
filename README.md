@@ -40,7 +40,7 @@ MAILER_DSN=
 
 Ou créez un fichier `.env.local` avec les lignes précédentes et ajoutez vos valeurs
 
-## Lancer de l'application
+## Lancer l'application
 
 ```sh
 symfony server:start -d
