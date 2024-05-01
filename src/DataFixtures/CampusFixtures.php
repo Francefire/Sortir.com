@@ -13,11 +13,11 @@ class CampusFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $campusReference = new Campus();
-        $campusReference->setName('Saint-Herblain');
+        $campusReference->setName('Campus Imaginaire');
 
         $manager->persist($campusReference);
 
-        foreach (['La Roche-sur-Yon', 'Chartres-de-Bretagne', 'Quimper', 'Niort', 'Angers', 'Saint-Nazaire'] as &$campusName) {
+        foreach (['Saint-Herblain', 'La Roche-sur-Yon', 'Chartres-de-Bretagne', 'Quimper', 'Niort', 'Angers', 'Saint-Nazaire'] as &$campusName) {
             $campus = new Campus();
             $campus->setName($campusName);
 

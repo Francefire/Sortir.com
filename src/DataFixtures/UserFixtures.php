@@ -12,7 +12,7 @@ class UserFixtures extends Fixture
     {
         $adminUser = new User();
         $adminUser->setUsername('admin');
-        $adminUser->setRoles(['ROLE_ADMIN']);
+        $adminUser->setRoles(['ROLE_ADMIN', 'ROLE_ORGANIZER', 'ROLE_USER']);
         $adminUser->setPassword('$2y$13$BLOHm3ry89axh4hP8IRkZ.TtLvFiOD7ylUe33eEfD0fjS1twlJi8u'); // admin
         $adminUser->setFirstname('Admin');
         $adminUser->setLastname('Admin');
@@ -23,6 +23,21 @@ class UserFixtures extends Fixture
         $adminUser->setCampus($this->getReference(CampusFixtures::CAMPUS_REFERENCE));
 
         $manager->persist($adminUser);
+        $manager->flush();
+
+        $user = new User();
+        $user->setUsername('organizer');
+        $user->setRoles(['ROLE_ORGANIZER', 'ROLE_USER']);
+        $user->setPassword('$2y$13$S90ikw6boIj/vv1wXR8CDeXDwylu/g34hK368CvANvYCSwHqssFEO '); // organizer
+        $user->setFirstname('Organizer');
+        $user->setLastname('Organizer');
+        $user->setEmail('organizer@example.com');
+        $user->setPhone('0123456789');
+        $user->setAdministrator(false);
+        $user->setDisabled(false);
+        $user->setCampus($this->getReference(CampusFixtures::CAMPUS_REFERENCE));
+
+        $manager->persist($user);
         $manager->flush();
 
         $user = new User();
