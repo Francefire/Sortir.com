@@ -51,13 +51,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotNull]
     private ?string $lastname = null;
 
-    #[ORM\Column(length: 120, nullable: true)]
+    #[ORM\Column(length: 120, nullable: false)]
+    #[Assert\Regex(pattern: '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/')]
     #[Assert\Email]
     #[Assert\NotBlank]
     #[Assert\NotNull]
+    #[Assert\Length(max: 120)]
     private ?string $email = null;
 
     #[ORM\Column(length: 12, nullable: true)]
+    #[Assert\Regex(pattern: '/^0[1-9]([-. ]?[0-9]{2}){4}$/')]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
     private ?string $phone = null;
 
     #[ORM\Column]

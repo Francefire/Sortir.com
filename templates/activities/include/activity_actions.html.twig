@@ -1,0 +1,23 @@
+<form method="post" class="flex flex-row justify-center text-center space-x-2">
+<a href="{{ path('activities_details', {'id': activity.id}) }}" class="grow text-palette-accent-light bg-palette-dark-dark rounded-md p-2 py-2.5 max-w-80 hover:bg-palette-dark-light transition">Voir</a>
+    {% if activity.host == app.user %}
+        <a href="{{ path('activities_edit', {'id': activity.id}) }}" class="grow text-palette-dark-dark bg-palette-light-dark rounded-md p-2 py-2.5 max-w-80 hover:bg-palette-light-light/50 border-2 border-palette-dark-dark transition">Modifier</a>
+        {% if activity.state.id == 1 %}
+            <button type="submit" formaction="{{ path('activities_publish', {'id': activity.id}) }}"
+                    class="grow text-palette-dark-dark bg-palette-light-dark rounded-md p-2 py-2.5 max-w-80 hover:bg-palette-light-light/50 border-2 border-palette-dark-dark transition">Publier
+            </button>
+        {% endif %}
+    {% endif %}
+    {% if activity.state.id == 2 %}
+        {% if app.user in activity.participants %}
+            <button type="submit" formaction="{{ path('activities_leave', {'id': activity.id}) }}"
+                    class="grow text-palette-dark-dark bg-palette-light-dark rounded-md p-2 py-2.5 max-w-80 hover:bg-palette-light-light/50 border-2 border-palette-dark-dark transition">Se désinscrire
+            </button>
+        {% else %}
+            <button type="submit" formaction="{{ path('activities_join', {'id': activity.id}) }}"
+                    class="grow text-palette-dark-dark bg-palette-light-dark rounded-md p-2 py-2.5 max-w-80 hover:bg-palette-light-light/50 border-2 border-palette-dark-dark transition">S'inscrire
+            </button>
+        {% endif %}
+        {# TODO : Ajouter bouton annuler #}
+    {% endif %}
+</form>

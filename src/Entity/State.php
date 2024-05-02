@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use App\Repository\StateRepository;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: StateRepository::class)]
 class State
 {
@@ -14,6 +14,9 @@ class State
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotNull]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 50)]
     private ?string $label = null;
 
     public function getId(): ?int

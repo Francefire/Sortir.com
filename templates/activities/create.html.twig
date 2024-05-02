@@ -3,9 +3,9 @@
 {% block title %}{{ parent() }} - Créer une sortie{% endblock %}
 
 {% block body %}
-    {{ form_errors(createForm) }}
 
     {{ form_start(createForm, {attr: {id : 'create_activity_form'}}) }}
+    {{ form_errors(createForm) }}
     <h5>Créer une sortie</h5>
     {{ form_row(createForm.name) }}
     {{ form_row(createForm.startDatetime) }}

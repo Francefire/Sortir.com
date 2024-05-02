@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ActivityRepository::class)]
 class Activity
@@ -18,18 +19,34 @@ class Activity
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotNull]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Assert\Type("\DateTimeInterface")]
+    #[Assert\GreaterThan("today")]
+    #[Assert\NotNull]
+    #[Assert\NotBlank]
     private ?DateTimeInterface $startDatetime = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
+    #[Assert\Type("\DateTimeInterface")]
+    #[Assert\NotNull]
+    #[Assert\NotBlank]
     private ?DateTimeInterface $duration = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Assert\Type("\DateTimeInterface")]
+    #[Assert\GreaterThan("today")]
+    #[Assert\NotNull]
+    #[Assert\NotBlank]
     private ?DateTimeInterface $registerLimitDatetime = null;
 
     #[ORM\Column]
+    #[Assert\NotNull]
+    #[Assert\NotBlank]
     private ?int $maxParticipants = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
