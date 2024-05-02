@@ -7,57 +7,52 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\EditUserType;
 use App\Repository\ActivityRepository;
-use App\Repository\UserRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[Route('/users', name: 'users_')]
 class UserController extends AbstractController
 {
-    #[Route('/user/profile/{id}', name: 'user_profile')]
-    public function profile(UserRepository $userRepository, User $user, int $id): Response
+    #[Route('/{id}', name: 'profile', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function profile(User $user): Response
     {
-        dump($user);
-        return $this->render('user/profile.html.twig', compact('user', 'id'));
+        return $this->render('users/profile.html.twig', [
+            'user' => $user,
+        ]);
     }
 
-    #[Route('/user/edit/{id}', name: 'user_edit')]
-    public function edit(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository, UserPasswordHasherInterface $userPasswordHasher, User $user): Response
+    #[IsGranted('USER_EDIT', 'user')]
+    #[Route('/{id}/edit', name: 'edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    public function edit(Request $request, UserService $userService, User $user): Response
     {
-
-        if ($this->getUser() !== $user) {
-            $this->addFlash('access_denied', 'Vous ne pouvez pas modifier le profil d\'un autre utilisateur');
-            return $this->redirectToRoute('user_profile', ['id' => $user->getId()]);
-        }
-
         $editForm = $this->createForm(EditUserType::class, $user);
-
         $editForm->handleRequest($request);
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            if (!empty($user->getPlainPassword())) {
-                $user->setPassword($userPasswordHasher->hashPassword($user, $user->getPlainPassword()));
-            }
 
-            $entityManager->flush();
+        if ($editForm->isSubmitted() && $editForm->isValid()) {
+            $userService->editUser($user);
+
             $this->addFlash('success', 'Profil modifié avec succès');
-            return $this->redirectToRoute('user_profile', ['id' => $user->getId()]);
+            return $this->redirectToRoute('users_profile', ['id' => $user->getId()]);
         }
 
-        return $this->render('user/edit.html.twig', [
+        return $this->render('users/edit.html.twig', [
             'editForm' => $editForm->createView(),
             'user' => $user
         ]);
     }
 
 
-    #[Route('/user/activity/{id}', name: 'user_activity')]
+    #[Route('/{id}/activities', name: 'activities', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function activity(User $user, ActivityRepository $activityRepository): Response
     {
-        $userActivity = $activityRepository->findActivityByUser($user);
-        dump($userActivity);
-        return $this->render('user/activity.html.twig', compact('userActivity'));
+        $userActivities = $activityRepository->findActivitiesByUser($user);
+
+        return $this->render('users/activities.html.twig', [
+            'userActivities' => $userActivities,
+        ]);
     }
 }
