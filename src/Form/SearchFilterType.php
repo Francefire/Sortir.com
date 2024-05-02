@@ -32,6 +32,9 @@ class SearchFilterType extends AbstractType
             ])
             ->add('search', SearchType::class, [
                 'label' => 'Le nom de la sortie contient',
+                'attr' => [
+                    'placeholder' => '🔎︎ Recherche dans le nom',
+                ],
                 'required' => false,
             ])
             ->add('startDate', DateTimeType::class, [
@@ -61,7 +64,7 @@ class SearchFilterType extends AbstractType
                 'required' => false,
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'Rechercher',
+                'label' => 'FILTRER',
             ])
         ;
     }
