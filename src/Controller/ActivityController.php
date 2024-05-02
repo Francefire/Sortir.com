@@ -11,6 +11,7 @@ use App\Form\LocationType;
 use App\Form\SearchFilterType;
 use App\Repository\ActivityRepository;
 use App\Service\ActivityService;
+use App\Service\DetectDevice;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,8 +21,8 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/activities', name: 'activities_')]
 class ActivityController extends AbstractController
 {
-    #[Route('', name: '', methods: ['GET', 'POST'])]
-    public function activities(Request $request, ActivityRepository $activityRepository): Response
+    #[Route('', name: 'list', methods: ['GET', 'POST'])]
+    public function activities(Request $request, DetectDevice $detectDevice, ActivityRepository $activityRepository): Response
     {
         $user = $this->getUser();
 
@@ -39,12 +40,20 @@ class ActivityController extends AbstractController
         return $this->render('activities/list.html.twig', [
             'filtersForm' => $filtersForm->createView(),
             'activities' => $activities,
+            'isMobile' => $detectDevice->isMobile($request->headers->get('User-Agent'))
         ]);
     }
 
     #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
-    public function create(Request $request, ActivityService $activityService, EntityManagerInterface $entityManager): Response
+    public function create(Request $request, ActivityService $activityService, DetectDevice $detectDevice, EntityManagerInterface $entityManager): Response
     {
+        $ua = $request->headers->get('User-Agent');
+
+        if ($detectDevice->isMobile($ua)) {
+            $this->addFlash('error', 'Vous ne pouvez pas créer d\'activités sur téléphone');
+            return $this->redirectToRoute('activities_list');
+        }
+
         $user = $this->getUser();
         $location = new Location();
         $activity = new Activity();
