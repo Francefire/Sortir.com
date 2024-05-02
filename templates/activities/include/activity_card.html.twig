@@ -1,0 +1,40 @@
+<article class="grid grid-cols-12 my-4 rounded-xl max-w-screen-2xl mx-auto overflow-hidden scale-95 hover:scale-100 transition shadow">
+    <section class="bg-cover bg-center bg-no-repeat col-span-2"
+             style="background-image: url(https://placehold.co/400x600);">
+    </section>
+    <section class="col-span-2 bg-palette-dark-dark text-palette-light-dark px-4 py-8 space-y-2">
+        <h2 class="text-palette-accent-light font-bold text-xl">{{ activity.name }}</h2>
+        <span class="whitespace-nowrap text-sm rounded bg-transparent outline outline-2 px-2.5 py-0.5
+            {% if activity.state.id == 1 %}
+                text-gray-400
+            {% elseif activity.state.id == 2 %}
+                text-green-700
+            {% elseif activity.state.id == 3 %}
+                text-orange-500
+            {% elseif activity.state.id == 4 %}
+                text-sky-500
+            {% elseif activity.state.id == 5 %}
+                text-gray-300
+            {% elseif activity.state.id == 6 %}
+                text-red-500
+            {% endif %}
+        ">
+            {{ activity.state.label }}
+        </span>
+        <div class="text-start text-sm items-center font-medium grid grid-cols-12 p-2">
+            <twig:ux:icon name="bxs:time-five" class="w-5 col-span-2"></twig:ux:icon><p class="col-span-10">{{ activity.duration|date('H:i') }}</p>
+            <twig:ux:icon name="ph:calendar-fill" class="w-5 col-span-2"></twig:ux:icon><p class="col-span-10">{{ activity.startDatetime|date('d/m/Y à H:i') }}</p>
+            <twig:ux:icon name="ph:calendar-slash-fill" class="w-5 col-span-2"></twig:ux:icon><p class="col-span-10">{{ activity.registerLimitDatetime|date('d/m/Y à H:i') }}</p>
+            <twig:ux:icon name="ph:users-three-fill" class="w-5 col-span-2"></twig:ux:icon><p class="col-span-10">{{ activity.participants|length }} / {{ activity.maxParticipants }} participants</p>
+            <twig:ux:icon name="ph:calendar-plus-fill" class="w-5 col-span-2"></twig:ux:icon><p class="col-span-10">Inscrit ? {{ app.user in activity.participants ? 'Oui' : 'Non' }}</p>
+            <twig:ux:icon name="ph:user-circle-fill" class="w-5 col-span-2"></twig:ux:icon><p class="col-span-10">{{ activity.host.firstname }} {{ activity.host.lastname|slice(0,1)|upper }}.</p>
+        </div>
+
+    </section>
+    <section class="col-span-8 bg-palette-light-dark text-palette-dark-dark p-4 font-medium grid grid-rows-5">
+        <p class="row-span-4">
+            {{ activity.description }}
+        </p>
+        <section class="row-start-5 row-span-1 inline-block w-full">{{ include('activity/include/activity_actions.html.twig') }}</section>
+    </section>
+</article>

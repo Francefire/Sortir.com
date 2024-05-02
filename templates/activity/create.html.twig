@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - Créer une sortie{% endblock %}
+
+{% block body %}
+    {{ form_errors(activityForm) }}
+
+    {{ form_start(activityForm, {attr: {id : 'create_activity_form'}}) }}
+    <h5>Créer une sortie</h5>
+    {{ form_row(activityForm.name) }}
+    {{ form_row(activityForm.startDatetime) }}
+    {{ form_row(activityForm.registerLimitDatetime) }}
+    {{ form_row(activityForm.maxParticipants) }}
+    {{ form_row(activityForm.duration) }}
+    {{ form_row(activityForm.description) }}
+    {{ form_row(activityForm.city) }}
+    {{ form_row(activityForm.location) }}
+        <a class="">
+            Ajouter un lieu
+        </a>
+    {{ form_row(activityForm.save) }}
+    {{ form_row(activityForm.publish) }}
+    <a href="{{ path('main_home') }}" class="">Retour</a>
+    {{ form_end(activityForm) }}
+
+    <div>
+        <div class="">
+            {{ form_start(locationForm) }}
+            {{ form_widget(locationForm) }}
+            {{ form_end(locationForm) }}
+        </div>
+    </div>
+
+{% endblock %}
+

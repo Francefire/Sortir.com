@@ -26,9 +26,15 @@ class SearchFilterType extends AbstractType
                 'label' => 'Campus',
                 'placeholder' => 'Choisir un campus',
                 'required' => false,
+                'choice_attr' => function () {
+                    return ['class' => 'bg-palette-light-dark'];
+                },
             ])
             ->add('search', SearchType::class, [
                 'label' => 'Le nom de la sortie contient',
+                'attr' => [
+                    'placeholder' => '🔎︎ Recherche dans le nom',
+                ],
                 'required' => false,
             ])
             ->add('startDate', DateTimeType::class, [
@@ -37,7 +43,7 @@ class SearchFilterType extends AbstractType
                 'widget' => 'single_text',
             ])
             ->add('endDate', DateTimeType::class, [
-                'label' => 'et',
+                'label' => 'Et',
                 'required' => false,
                 'widget' => 'single_text',
             ])
@@ -58,7 +64,7 @@ class SearchFilterType extends AbstractType
                 'required' => false,
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'Rechercher',
+                'label' => 'FILTRER',
             ])
         ;
     }
