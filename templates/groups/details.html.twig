@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ group.name }}
+    {% for participant in group.participants %}
+        {{ participant.username }}
+    {% endfor %}
+    <a href="{{ path('groups_edit', {'id': group.id}) }}">Modifier</a>
+    <form method="POST" action="{{ path('groups_delete', {'id': group.id}) }}">
+        <input type="submit">Supprimer</input>
+    </form>
+{% endblock %}
+

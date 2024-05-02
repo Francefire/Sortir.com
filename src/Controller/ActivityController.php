@@ -29,7 +29,6 @@ class ActivityController extends AbstractController
         $activityForm = $this->createForm(ActivityType::class, $activity);
         $locationForm = $this->createForm(LocationType::class, $location);
 
-
         $locationForm->handleRequest($request);
         if ($locationForm->get('add')->isClicked()) {
             if ($locationForm->isSubmitted() && $locationForm->isValid()) {
