@@ -6,12 +6,11 @@ use App\Entity\Activity;
 use App\Entity\User;
 use App\Repository\StateRepository;
 use DateTime;
-use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ActivityService
 {
-    private int $oneMonth = 2629743;
+    private const UNIX_ONE_MONTH = 2629743;
     private readonly array $states;
 
     public function __construct(
@@ -49,6 +48,10 @@ class ActivityService
     public function joinActivity(Activity $activity, User $user): void
     {
         if (!($this->canInteract($activity, $user))) {
+            return;
+        }
+
+        if (sizeof($activity->getParticipants()) < $activity->getMaxParticipants()) {
             return;
         }
 
@@ -93,7 +96,7 @@ class ActivityService
             return;
         }
 
-        $datetimeNow = new DateTime('now', new DateTimeZone('Europe/Paris'));
+        $datetimeNow = new DateTime('now');
         $datetimeNow = $datetimeNow->getTimestamp();
 
         $activityRegisterLimitDatetime = $activity->getRegisterLimitDatetime()->getTimestamp();
@@ -105,20 +108,16 @@ class ActivityService
             case ($activityRegisterLimitDatetime > $datetimeNow):
                 $activity->setState($this->states[1]);
                 break;
-            case ($activityRegisterLimitDatetime < $datetimeNow):
-                if ($activityStartDatetime > $datetimeNow) {
-                    $activity->setState($this->states[2]);
-                    break;
-                }
-
-                if ($activityStartDatetime < $datetimeNow) {
-                    $activity->setState($this->states[2]);
-                    break;
-                }
-
+            case ($activityRegisterLimitDatetime < $datetimeNow && $activityStartDatetime > $datetimeNow):
+                $activity->setState($this->states[2]);
+                break;
+            case ($activityStartDatetime < $datetimeNow && $activityEndDatetime > $datetimeNow):
+                $activity->setState($this->states[3]);
+                break;
+            case ($activityEndDatetime < $datetimeNow && ($activityEndDatetime + self::UNIX_ONE_MONTH) > $datetimeNow):
                 $activity->setState($this->states[4]);
                 break;
-            case (($activityEndDatetime + $this->oneMonth) < $datetimeNow):
+            case (($activityEndDatetime + self::UNIX_ONE_MONTH) < $datetimeNow):
                 $this->deleteActivity($activity);
                 return;
             default:
@@ -130,6 +129,7 @@ class ActivityService
 
     private function deleteActivity(Activity $activity): void
     {
-
+        $this->entityManager->remove($activity);
+        $this->entityManager->flush();
     }
 }
