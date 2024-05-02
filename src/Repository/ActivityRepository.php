@@ -90,7 +90,27 @@ class ActivityRepository extends ServiceEntityRepository
             $qb->andWhere('a.state != 1')
                 ->andWhere('a.state != 5');
         }
-      
+
         return $qb->getQuery()->getResult();
+    }
+
+    public function findPresentActivites(){
+        return $this->createQueryBuilder('a')
+            ->orWhere('a.state = 2')
+            ->orWhere('a.state = 3')
+            ->orWhere('a.state = 4')
+            ->orderBy('a.startDatetime', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findCreatedNotPublishedActivities(User $user){
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.host = :user')
+            ->andWhere('a.state = 1')
+            ->orderBy('a.startDatetime', 'DESC')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
     }
 }

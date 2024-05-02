@@ -91,7 +91,7 @@ class ActivityController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'details', requirements: ['page' => '\d+'], methods: ['GET'])]
+    #[Route('/{id}', name: 'details', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function details(Activity $activity): Response
     {
         return $this->render('activities/details.html.twig', [
@@ -100,7 +100,7 @@ class ActivityController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'edit', requirements: ['page' => '\d+'], methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function edit(Request $request, Activity $activity, ActivityService $activityService): Response
     {
         $editForm = $this->createForm(EditActivityType::class, $activity);
@@ -120,7 +120,7 @@ class ActivityController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/join', name: 'join', requirements: ['page' => '\d+'], methods: ['POST'])]
+    #[Route('/{id}/join', name: 'join', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function join(Activity $activity, ActivityService $activityService): Response
     {
         $user = $this->getUser();
@@ -131,7 +131,7 @@ class ActivityController extends AbstractController
         return $this->redirectToRoute('activities_details', ['id' => $activity->getId()]);
     }
 
-    #[Route('/{id}/leave', name: 'leave', requirements: ['page' => '\d+'], methods: ['POST'])]
+    #[Route('/{id}/leave', name: 'leave', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function leave(Activity $activity, ActivityService $activityService): Response
     {
         $user = $this->getUser();
@@ -140,5 +140,27 @@ class ActivityController extends AbstractController
 
         $this->addFlash('success', 'Activity left!');
         return $this->redirectToRoute('activities_details', ['id' => $activity->getId()]);
+    }
+
+    #[Route('/{id}/cancel', name: 'cancel', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function cancel(Activity $activity, EntityManagerInterface $entityManager, ActivityService $activityService): Response
+    {
+        //TODO : Gerer exceptions dans le cas ou l'user n'est pas l'organisateur
+
+        $activity->setState($activityService->getStates()[5]);
+        $entityManager->flush();
+        $this->addFlash('success', 'Activité annulée avec succès');
+        return $this->redirectToRoute('activity_details', ['id' => $activity->getId()]);
+    }
+
+    #[Route('/{id}/publish', name: 'publish', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function publish(Activity $activity, EntityManagerInterface $entityManager, ActivityService $activityService): Response
+    {
+        //TODO : Gerer exceptions ou le cas ou l'activité est deja publié ou annulé etc etc
+
+        $activity->setState($activityService->getStates()[5]);
+        $entityManager->flush();
+        $this->addFlash('success', 'Activité publiée avec succès');
+        return $this->redirectToRoute('activity_details', ['id' => $activity->getId()]);
     }
 }
