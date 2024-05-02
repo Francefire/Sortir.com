@@ -2,26 +2,28 @@
 
 namespace App\Service;
 
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FileService
 {
-    private string $targetDirectory = 'images/uploads/profile';
+    private const UPLOADS_DIR = 'uploads';
 
-    public function upload(UploadedFile $file): string
+    public function __construct(
+        private readonly Filesystem $filesystem
+    )
     {
-
-        $fileHash = md5_file($file->getPathname());
-        $fileName = $fileHash . '.' . $file->guessExtension();
-        $file->move($this->getTargetDirectory(), $fileName);
-
-        // TODO: Optimiser les images téléchargées
-
-        return $fileName;
+        if (!($this->filesystem->exists(self::UPLOADS_DIR))) {
+            $this->filesystem->mkdir(self::UPLOADS_DIR);
+        }
     }
 
-    public function getTargetDirectory(): string
+    public function upload(UploadedFile $file, string $path): string
     {
-        return $this->targetDirectory;
+        $fileHash = md5_file($file->getPathname());
+        $fileName = $fileHash . '.' . $file->guessExtension();
+        $file->move(self::UPLOADS_DIR . $path, $fileName);
+
+        return $fileName;
     }
 }

@@ -73,7 +73,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?Campus $campus = null;
 
     #[ORM\Column(length: 256, nullable: true)]
-    private ?string $profilePictureFilename = null;
+    private ?string $avatarFileName = null;
 
     public function getId(): ?int
     {
@@ -234,16 +234,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getProfilePictureFilename(): ?string
-    {
-        return $this->profilePictureFilename;
-    }
-
-    public function setProfilePictureFilename(?string $profilePictureFilename): void
-    {
-        $this->profilePictureFilename = $profilePictureFilename;
-    }
-
     public function __toString(): string
     {
         return $this->getUsername();
@@ -259,5 +249,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->username = $username;
 
         return $this;
+    }
+
+    public function getAvatarFileName(): ?string
+    {
+        return $this->avatarFileName;
+    }
+
+    public function setAvatarFileName(?string $avatarFileName): void
+    {
+        $this->avatarFileName = $avatarFileName;
     }
 }

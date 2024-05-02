@@ -79,7 +79,9 @@ class ActivityController extends AbstractController
         if ($createForm->isSubmitted() && $createForm->isValid()) {
             $stateId = $createForm->get('save')->isClicked() ? 0 : 1;
 
-            $activityService->createActivity($activity, $user, $stateId);
+            $file = $createForm->get('image')->getData();
+
+            $activityService->createActivity($activity, $user, $file, $stateId);
 
             $this->addFlash('success', 'Activity created!');
             return $this->redirectToRoute('activities_details', ['id' => $activity->getId()]);
@@ -109,7 +111,9 @@ class ActivityController extends AbstractController
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $stateId = $editForm->get('save')->isClicked() ? 0 : 1;
 
-            $activityService->editActivity($activity, $stateId);
+            $file = $editForm->get('image')->getData();
+
+            $activityService->editActivity($activity, $stateId, $file);
 
             $this->addFlash('success', 'Activity edited!');
             return $this->redirectToRoute('activities_details', ['id' => $activity->getId()]);

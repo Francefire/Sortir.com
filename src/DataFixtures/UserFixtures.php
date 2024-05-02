@@ -28,7 +28,7 @@ class UserFixtures extends Fixture
         $user = new User();
         $user->setUsername('organizer');
         $user->setRoles(['ROLE_ORGANIZER', 'ROLE_USER']);
-        $user->setPassword('$2y$13$S90ikw6boIj/vv1wXR8CDeXDwylu/g34hK368CvANvYCSwHqssFEO '); // organizer
+        $user->setPassword('$2y$13$S90ikw6boIj/vv1wXR8CDeXDwylu/g34hK368CvANvYCSwHqssFEO'); // organizer
         $user->setFirstname('Organizer');
         $user->setLastname('Organizer');
         $user->setEmail('organizer@example.com');

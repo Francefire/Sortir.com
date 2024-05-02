@@ -3,7 +3,7 @@
 
 {% block body %}
     {% include('activities/include/display_activity.html.twig') %}
-
+    <img src="/public/uploads/images/{{ activity.imageFileName }}" alt="">
     {% if user in activity.participants %}
         <form action="{{ path('activities_leave', {'id': activity.id}) }}" method="POST">
             <button type="submit">Se désinscrire</button>
