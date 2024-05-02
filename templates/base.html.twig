@@ -26,10 +26,10 @@
             </a>
         </div>
         <div class="font-bold space-x-4 text-xl decoration-4">
-            <a href="{{ path('activity_list') }}"
+            <a href="{{ path('activities_list') }}"
                class="{% if 'list' in app.request.pathInfo %}text-palette-accent-dark{% endif %} hover:underline hover:text-palette-accent-dark">Accueil</a>
             {% if app.user %}
-                <a href="{{ path('user_profile', {'id': app.user.id}) }}"
+                <a href="{{ path('users_profile', {'id': app.user.id}) }}"
                    class="{% if 'profile' in app.request.pathInfo %}text-palette-accent-dark{% endif %} hover:underline hover:text-palette-accent-dark">Mon Profil</a>
                 <a href="{{ path('app_logout') }}" class="hover:underline hover:text-palette-accent-dark">Se Déconnecter</a>
             {% else %}

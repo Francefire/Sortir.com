@@ -1,23 +1,23 @@
 
-{{ form_start(searchFilterForm) }}
+{{ form_start(filterForm) }}
 <div class="flex flex-row justify-around items-stretch font-bold px-4">
     <div class="basis-1/4 self-center">
-        {{ form_widget(searchFilterForm.campus, {'attr' : {'class' : 'w-full p-3 border-2 border-black rounded-md bg-palette-light-light'}}) }}
+        {{ form_widget(filterForm.campus, {'attr' : {'class' : 'w-full p-3 border-2 border-black rounded-md bg-palette-light-light'}}) }}
     </div>
     <div class="flex flex-col justify-between space-y-6 self-center">
-        {{ form_row(searchFilterForm.startDate, {'attr' : {'class' : 'p-3 border-2 border-black rounded-md bg-palette-light-light flex flex-col mt-2'}}) }}
-        {{ form_row(searchFilterForm.endDate, {'attr' : {'class' : 'p-3 border-2 border-black rounded-md bg-palette-light-light flex flex-col mt-2'}}) }}
+        {{ form_row(filterForm.startDate, {'attr' : {'class' : 'p-3 border-2 border-black rounded-md bg-palette-light-light flex flex-col mt-2'}}) }}
+        {{ form_row(filterForm.endDate, {'attr' : {'class' : 'p-3 border-2 border-black rounded-md bg-palette-light-light flex flex-col mt-2'}}) }}
     </div>
     <div class="flex flex-col justify-around">
         {# TODO : Checkbox a droite label a gauche #}
-        {{ form_row(searchFilterForm.organizer, {'attr' : {'class' : ''}}) }}
-        {{ form_row(searchFilterForm.registered) }}
-        {{ form_row(searchFilterForm.notRegistered) }}
-        {{ form_row(searchFilterForm.finished) }}
+        {{ form_row(filterForm.organizer, {'attr' : {'class' : ''}}) }}
+        {{ form_row(filterForm.registered) }}
+        {{ form_row(filterForm.notRegistered) }}
+        {{ form_row(filterForm.finished) }}
     </div>
     <div class="flex flex-col space-y-4 justify-center basis-1/4 self-center w-full">
-        {{ form_widget(searchFilterForm.search, {'attr' : {'class' : 'w-full p-4 rounded-md bg-palette-light-light border-palette-dark-dark border-2 '}}) }}
-        {{ form_widget(searchFilterForm.submit, {'attr' : {'class' : 'w-full text-palette-accent-light bg-palette-dark-dark rounded-md p-4 before:content-[\'🔎︎︎__\']  hover:bg-palette-dark-light transition'}}) }}
+        {{ form_widget(filterForm.search, {'attr' : {'class' : 'w-full p-4 rounded-md bg-palette-light-light border-palette-dark-dark border-2 '}}) }}
+        {{ form_widget(filterForm.submit, {'attr' : {'class' : 'w-full text-palette-accent-light bg-palette-dark-dark rounded-md p-4 before:content-[\'🔎︎︎__\']  hover:bg-palette-dark-light transition'}}) }}
     </div>
 </div>
-{{ form_end(searchFilterForm) }}
+{{ form_end(filterForm) }}

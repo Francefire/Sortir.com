@@ -27,18 +27,18 @@ class ActivityController extends AbstractController
         $user = $this->getUser();
 
         $searchFilter = new SearchFilter();
-        $filtersForm = $this->createForm(SearchFilterType::class, $searchFilter);
+        $filterForm = $this->createForm(SearchFilterType::class, $searchFilter);
 
-        $filtersForm->handleRequest($request);
+        $filterForm->handleRequest($request);
 
-        if ($filtersForm->isSubmitted() && $filtersForm->isValid()) {
+        if ($filterForm->isSubmitted() && $filterForm->isValid()) {
             $activities = $activityRepository->findActivitiesBySearchFilter($searchFilter, $user);
         } else {
             $activities = $activityRepository->findAll();
         }
 
         return $this->render('activities/list.html.twig', [
-            'filtersForm' => $filtersForm->createView(),
+            'filterForm' => $filterForm->createView(),
             'activities' => $activities,
             'isMobile' => $detectDevice->isMobile($request->headers->get('User-Agent'))
         ]);
@@ -150,7 +150,7 @@ class ActivityController extends AbstractController
         $activity->setState($activityService->getStates()[5]);
         $entityManager->flush();
         $this->addFlash('success', 'Activité annulée avec succès');
-        return $this->redirectToRoute('activity_details', ['id' => $activity->getId()]);
+        return $this->redirectToRoute('activities_details', ['id' => $activity->getId()]);
     }
 
     #[Route('/{id}/publish', name: 'publish', requirements: ['id' => '\d+'], methods: ['POST'])]
@@ -161,6 +161,6 @@ class ActivityController extends AbstractController
         $activity->setState($activityService->getStates()[5]);
         $entityManager->flush();
         $this->addFlash('success', 'Activité publiée avec succès');
-        return $this->redirectToRoute('activity_details', ['id' => $activity->getId()]);
+        return $this->redirectToRoute('activities_details', ['id' => $activity->getId()]);
     }
 }
