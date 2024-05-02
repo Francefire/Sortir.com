@@ -12,7 +12,6 @@ use App\Form\SearchFilterType;
 use App\Repository\ActivityRepository;
 use App\Service\ActivityService;
 use App\Service\DetectDevice;
-use App\Service\StateService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

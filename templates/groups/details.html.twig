@@ -7,7 +7,7 @@
     {% endfor %}
     <a href="{{ path('groups_edit', {'id': group.id}) }}">Modifier</a>
     <form method="POST" action="{{ path('groups_delete', {'id': group.id}) }}">
-        <input type="submit">Supprimer</input>
+        <input type="submit" value="Supprimer">
     </form>
 {% endblock %}
 
