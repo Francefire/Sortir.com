@@ -23,31 +23,6 @@ class ActivityRepository extends ServiceEntityRepository
         parent::__construct($registry, Activity::class);
     }
 
-    //    /**
-    //     * @return Activity[] Returns an array of Activity objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('s.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Activity
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
-
     public function findActivityByUser($user)
     {
         return $this->createQueryBuilder('a')
@@ -109,16 +84,12 @@ class ActivityRepository extends ServiceEntityRepository
                 ->setParameter('user', $user);
         }
 
-        if($searchFilter->getFinished()){
+        if ($searchFilter->getFinished()) {
             $qb->andWhere('a.state = 5');
-        }else{
+        } else {
             $qb->andWhere('a.state != 1')
                 ->andWhere('a.state != 5');
         }
-
-
-
-
 
         return $qb->getQuery()->getResult();
     }
