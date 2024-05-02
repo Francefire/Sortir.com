@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Activity;
 use App\Entity\Campus;
 use App\Entity\City;
+use App\Entity\Group;
 use App\Entity\State;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -40,6 +41,7 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Utilisateurs', 'fa fa-user', User::class),
             MenuItem::linkToCrud('Campus', 'fa fa-industry', Campus::class),
             MenuItem::linkToCrud('Ville', 'fa fa-building', City::class),
+            MenuItem::linkToCrud('Groupes', 'fa fa-building', Group::class),
         ];
     }
 }

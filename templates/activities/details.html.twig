@@ -2,14 +2,14 @@
 {% block title %}{{ parent() }} - {{ activity.name }}{% endblock %}
 
 {% block body %}
-    {% include('activity/include/display_activity.html.twig') %}
+    {% include('activities/include/display_activity.html.twig') %}
 
     {% if user in activity.participants %}
-        <form action="{{ path('activity_leave', {'id': activity.id}) }}" method="POST">
+        <form action="{{ path('activities_leave', {'id': activity.id}) }}" method="POST">
             <button type="submit">Se désinscrire</button>
         </form>
     {% else %}
-        <form action="{{ path('activity_join', {'id': activity.id}) }}" method="POST">
+        <form action="{{ path('activities_join', {'id': activity.id}) }}" method="POST">
             <button type="submit">S'inscrire</button>
         </form>
     {% endif %}
@@ -21,7 +21,7 @@
         </tr>
         {% for participant in activity.participants %}
             <tr>
-                <td><a href="{{ path('user_profile', {'id': participant.id}) }}" >{{ participant.username }}</a></td>
+                <td><a href="{{ path('user_profile', {'id': participant.id}) }}">{{ participant.username }}</a></td>
                 <td>{{ participant.firstname }}</td>
             </tr>
         {% endfor %}

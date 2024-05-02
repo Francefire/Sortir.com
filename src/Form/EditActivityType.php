@@ -7,6 +7,7 @@ use App\Entity\Campus;
 use App\Entity\Location;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -16,7 +17,7 @@ class EditActivityType extends AbstractType
     {
         $builder
             ->add('name')
-                ->add('startDatetime', null, [
+            ->add('startDatetime', null, [
                 'widget' => 'single_text',
             ])
             ->add('registerLimitDatetime', null, [
@@ -35,7 +36,8 @@ class EditActivityType extends AbstractType
                 'class' => Location::class,
                 'choice_label' => 'name',
             ])
-        ;
+            ->add('save', SubmitType::class, ['label' => 'Enregistrer'])
+            ->add('publish', SubmitType::class, ['label' => 'Publier']);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
