@@ -51,7 +51,7 @@ class ActivityService
             return;
         }
 
-        if (sizeof($activity->getParticipants()) < $activity->getMaxParticipants()) {
+        if (!(sizeof($activity->getParticipants()) <= $activity->getMaxParticipants())) {
             return;
         }
 
@@ -65,7 +65,7 @@ class ActivityService
 
     private function canInteract(Activity $activity, $user): bool
     {
-        if (!($this->isEditable($activity))) {
+        if ($this->isEditable($activity)) {
             return false;
         }
 
