@@ -11,7 +11,7 @@
     <image src="{{ asset('images/uploads/profile/') }}{{ user.profilePictureFilename }}"></image>
 
     <a href="{{ path('main_home') }}" class="">Retour</a>
-    {% if app.user.id == id %}
-        <a href="{{ path('user_edit', {'id': user.id}) }}" class="">Modifier mon profil</a>
+    {% if app.user.id == user.id %}
+        <a href="{{ path('users_edit', {'id': user.id}) }}" class="">Modifier mon profil</a>
     {% endif %}
 {% endblock %}

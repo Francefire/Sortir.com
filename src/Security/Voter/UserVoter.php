@@ -9,12 +9,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserVoter extends Voter
 {
-    public const EDIT = 'USER_EDIT';
+    private const EDIT = 'USER_EDIT';
 
     protected function supports(string $attribute, mixed $subject): bool
     {
         // if the attribute isn't one we support, return false
-        if (!in_array($attribute, [self::EDIT])) {
+        if ($attribute != self::EDIT) {
             return false;
         }
 
@@ -36,9 +36,8 @@ class UserVoter extends Voter
         }
 
         // ... (check conditions and return true to grant permission) ...
-        switch ($attribute) {
-            case self::EDIT:
-                return $this->canEdit($subject, $user);
+        if ($attribute == self::EDIT) {
+            return $this->canEdit($subject, $user);
         }
 
         return false;

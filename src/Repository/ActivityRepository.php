@@ -23,7 +23,7 @@ class ActivityRepository extends ServiceEntityRepository
         parent::__construct($registry, Activity::class);
     }
 
-    public function findActivityByUser($user)
+    public function findActivitiesByUser($user)
     {
         return $this->createQueryBuilder('a')
             ->andWhere('a.host = :user')
@@ -90,7 +90,7 @@ class ActivityRepository extends ServiceEntityRepository
             $qb->andWhere('a.state != 1')
                 ->andWhere('a.state != 5');
         }
-
+      
         return $qb->getQuery()->getResult();
     }
 }
