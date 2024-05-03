@@ -13,12 +13,17 @@ class StateFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
+        $state = new State();
+        $state->setLabel('Créée');
+
+        $manager->persist($state);
+
         $stateReference = new State();
-        $stateReference->setLabel('Créée');
+        $stateReference->setLabel('Ouverte');
 
         $manager->persist($stateReference);
 
-        foreach (['Ouverte', 'Clôturée', 'Activité en cours', 'Passée', 'Annulée'] as &$stateName) {
+        foreach (['Clôturée', 'Activité en cours', 'Passée', 'Annulée'] as &$stateName) {
             $state = new State();
             $state->setLabel($stateName);
 
