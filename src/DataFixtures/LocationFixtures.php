@@ -4,9 +4,11 @@ namespace App\DataFixtures;
 
 use App\Entity\Location;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class LocationFixtures extends Fixture
+
+class LocationFixtures extends Fixture implements DependentFixtureInterface
 {
     public const LOCATION_REFERENCE = 'location';
     public function load(ObjectManager $manager): void

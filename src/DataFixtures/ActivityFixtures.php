@@ -5,11 +5,14 @@ namespace App\DataFixtures;
 use App\Entity\Activity;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-class ActivityFixtures extends Fixture
+class ActivityFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
+
+
         $activity = new Activity();
         $activity->setName('Soirée E-Sport 2024');
         $activity->setDescription('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Adipiscing enim eu turpis egestas pretium aenean. Ultrices dui sapien eget mi proin. Scelerisque varius morbi enim nunc faucibus a pellentesque. Pharetra convallis posuere morbi leo urna molestie at elementum. Velit ut tortor pretium viverra suspendisse potenti nullam ac tortor. Dui nunc mattis enim ut. Non tellus orci ac auctor augue mauris. Sem integer vitae justo eget. Dignissim suspendisse in est ante in. In fermentum et sollicitudin ac orci phasellus egestas tellus rutrum. Consequat semper viverra nam libero justo laoreet sit. Suspendisse potenti nullam ac tortor vitae purus faucibus ornare suspendisse. Etiam tempor orci eu lobortis. Nisl purus in mollis nunc sed id semper. Iaculis eu non diam phasellus vestibulum lorem sed.');
@@ -20,7 +23,6 @@ class ActivityFixtures extends Fixture
         $activity->setMaxParticipants(10);
         $activity->setHost($this->getReference(UserFixtures::USER_REFERENCE));
         $activity->setCampus($this->getReference(CampusFixtures::CAMPUS_REFERENCE));
-
         $manager->persist($activity);
 
         $activity->setName('Fete de Mars');
@@ -80,8 +82,8 @@ class ActivityFixtures extends Fixture
     {
         return [
             LocationFixtures::class,
-            CampusFixtures::class,
             UserFixtures::class,
+            CampusFixtures::class,
         ];
     }
 }
