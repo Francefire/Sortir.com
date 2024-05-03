@@ -1,6 +1,6 @@
 Nom de la sortie: {{ activity.name }}
 <br>
-Date de la sortie: {{ activity.startDatetime|date('d/m/Y') }}
+Date de la sortie: {{ activity.startDatetime|date('d/m/Y H:i', 'Europe/Paris') }}
 <br>
 Durée de la sortie : {{ activity.duration | date('H:i') }}
 <br>
@@ -18,4 +18,4 @@ Campus de la sortie : {{ activity.campus.name }}
 <br>
 Etat de la sortie: {{ activity.state.label }}
 <br>
-Date limite d'inscription : {{ activity.registerLimitDatetime|date('d/m/Y') }}
+Date limite d'inscription : {{ activity.registerLimitDatetime|date('d/m/Y H:i', 'Europe/Paris') }}

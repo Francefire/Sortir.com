@@ -6,6 +6,7 @@ use App\Entity\Activity;
 use App\Entity\User;
 use App\Repository\StateRepository;
 use DateTime;
+use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -104,10 +105,6 @@ class ActivityService
 
     public function updateActivity(Activity $activity): void
     {
-        if ($activity->getState()->getLabel() == ['Créée', 'Annulée']) {
-            return;
-        }
-
         $datetimeNow = new DateTime('now');
         $datetimeNow = $datetimeNow->getTimestamp();
 
@@ -115,6 +112,14 @@ class ActivityService
         $activityStartDatetime = $activity->getStartDatetime()->getTimestamp();
         $activityDuration = $activity->getDuration()->getTimestamp();
         $activityEndDatetime = $activityStartDatetime + $activityDuration;
+
+        if (in_array($activity->getState()->getLabel(), ['Créée', 'Annulée'])) {
+            if (($activity->getState()->getLabel() == 'Annulée') && (($activityEndDatetime + self::UNIX_ONE_MONTH) < $datetimeNow)) {
+                $this->deleteActivity($activity);
+            }
+
+            return;
+        }
 
         switch (true) {
             case ($activityRegisterLimitDatetime > $datetimeNow):

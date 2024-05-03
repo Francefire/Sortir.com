@@ -1,64 +1,26 @@
 {% extends 'base.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    {#
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" />
+    <link rel="stylesheet" href="{{ asset('styles/activity_list/base.css') }}">
+
+    #}
+
+
+{% endblock %}
 
 {% block body %}
-    {{ form_start(filtersForm) }}
-    {{ form_widget(filtersForm) }}
-    {{ form_end(filtersForm) }}
 
-    <h2>Liste des activités</h2>
-    <table class="table">
-        <tr>
-            <th>Nom de la sortie</th>
-            <th>Date de la sortie</th>
-            <th>Cloture</th>
-            <th>Inscrits / Places</th>
-            <th>Etat</th>
-            <th>Inscrit</th>
-            <th>Organisateur</th>
-            <th>Actions</th>
-        </tr>
-        {% for activity in activities %}
-            <tr>
-                <td>{{ activity.name }}</td>
-                <td>{{ activity.startDatetime|date('d/m/Y') }}</td>
-                <td>{{ activity.registerLimitDatetime|date('d/m/Y') }}</td>
-                <td>{{ activity.participants|length }} / {{ activity.maxParticipants }}</td>
-                <td>{{ activity.state.label }}</td>
-                <td>{{ app.user in activity.participants ? 'Oui' : 'Non' }}</td>
-                <td>{{ activity.host.firstname }} {{ activity.host.lastname|slice(0,1)|upper }}.</td>
-                <td style="display: inline-flex;align-items: center;">
+    {% include('activities/include/search_filter.html.twig') %}
+    {% for activity in activities %}
+        {% include('activities/include/activity_card.html.twig') %}
+    {% endfor %}
 
-                    <a href="{{ path('activities_details', {'id': activity.id}) }}" class="btn btn-link">Voir</a>
-                    {% if activity.host == app.user %}
-                        |<a href="{{ path('activities_edit', {'id': activity.id}) }}" class="btn btn-link">Modifier</a>
-                        {% if activity.state.id == 1 %}
-                            |<a href="{# TODO : Creer la route pour publier une sortie #}">Publier</a>
-                        {% endif %}
-                    {% endif %}
-                    <form method="post">
-                        {% if app.user in activity.participants %}
-                            |
-                            <button type="submit" formaction="{{ path('activities_leave', {'id': activity.id}) }}"
-                                    class="btn btn-link">Se désinscrire
-                            </button>
-                        {% else %}
-                            |
-                            <button type="submit" formaction="{{ path('activities_join', {'id': activity.id}) }}"
-                                    class="btn btn-link">S'inscrire
-                            </button>
-                        {% endif %}
-                    </form>
-                </td>
-            </tr>
-
-        {% endfor %}
-    </table>
-
-    <a href="{{ path('activities_create') }}" class="btn btn-primary">Créer une sortie</a>
-
+    <a href="{{ path('activities_create') }}" class="">Créer une sortie</a>
 {% endblock %}
 
 {% block title %}
     {{ parent() }} - Liste des sorties
 {% endblock %}
-

@@ -9,9 +9,9 @@ class SearchFilter
     private ?Campus $campus = null;
 
     private ?string $search = null;
-    //#[Assert\DateTime]
+    #[Assert\Type("\DateTimeInterface")]
     private ?\DateTimeInterface $startDate = null;
-    //#[Assert\DateTime]
+    #[Assert\Type("\DateTimeInterface")]
     private ?\DateTimeInterface $endDate = null;
     private ?bool $organizer = false;
     private ?bool $registered = false;
