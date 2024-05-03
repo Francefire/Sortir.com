@@ -2,16 +2,23 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Campus;
 use App\Entity\State;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
 class StateFixtures extends Fixture
 {
+
+    public const STATE_REFERENCE = 'state';
+
     public function load(ObjectManager $manager): void
     {
-        foreach (['Créée', 'Ouverte', 'Clôturée', 'Activité en cours', 'Passée', 'Annulée'] as &$stateName) {
+        $stateReference = new State();
+        $stateReference->setLabel('Créée');
+
+        $manager->persist($stateReference);
+
+        foreach (['Ouverte', 'Clôturée', 'Activité en cours', 'Passée', 'Annulée'] as &$stateName) {
             $state = new State();
             $state->setLabel($stateName);
 
@@ -19,5 +26,7 @@ class StateFixtures extends Fixture
         }
 
         $manager->flush();
+
+        $this->addReference(self::STATE_REFERENCE, $stateReference);
     }
 }
