@@ -27,10 +27,10 @@ class ActivityFixtures extends Fixture implements DependentFixtureInterface
         $activity->setState($this->getReference(StateFixtures::STATE_REFERENCE));
         $manager->persist($activity);
 
-        $activity->setName('Fete de Mars');
+        $activity->setName('Fete de Avril');
         $activity->setDescription('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Adipiscing enim eu turpis egestas pretium aenean. Ultrices dui sapien eget mi proin. Scelerisque varius morbi enim nunc faucibus a pellentesque. Pharetra convallis posuere morbi leo urna molestie at elementum. Velit ut tortor pretium viverra suspendisse potenti nullam ac tortor. Dui nunc mattis enim ut. Non tellus orci ac auctor augue mauris. Sem integer vitae justo eget. Dignissim suspendisse in est ante in. In fermentum et sollicitudin ac orci phasellus egestas tellus rutrum. Consequat semper viverra nam libero justo laoreet sit. Suspendisse potenti nullam ac tortor vitae purus faucibus ornare suspendisse. Etiam tempor orci eu lobortis. Nisl purus in mollis nunc sed id semper. Iaculis eu non diam phasellus vestibulum lorem sed.');
-        $activity->setRegisterLimitDatetime(new DateTime('2024-03-05 12:00:00'));
-        $activity->setStartDatetime(new DateTime('2024-03-06 12:00:00'));
+        $activity->setRegisterLimitDatetime(new DateTime('2024-04-15 12:00:00'));
+        $activity->setStartDatetime(new DateTime('2024-04-16 12:00:00'));
         $activity->setDuration(new DateTime('000-00-00 02:30:00'));
         $activity->setLocation($this->getReference(LocationFixtures::LOCATION_REFERENCE));
         $activity->setMaxParticipants(10);
