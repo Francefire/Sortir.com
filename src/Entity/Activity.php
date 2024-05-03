@@ -74,6 +74,9 @@ class Activity
     #[ORM\ManyToMany(targetEntity: User::class, fetch: "EAGER")]
     private Collection $participants;
 
+    #[ORM\Column(length: 256, nullable: true)]
+    private ?string $imageFileName = null;
+
     public function __construct()
     {
         $this->participants = new ArrayCollection();
@@ -226,5 +229,15 @@ class Activity
         $this->participants->removeElement($participant);
 
         return $this;
+    }
+
+    public function getImageFileName(): ?string
+    {
+        return $this->imageFileName;
+    }
+
+    public function setImageFileName(?string $imageFileName): void
+    {
+        $this->imageFileName = $imageFileName;
     }
 }

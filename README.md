@@ -28,7 +28,7 @@
 
 ## Configuration de l'environnement
 
-Renommer le fichier `.env.example` en `.env` et modifier les lignes suivantes avec vos valeurs
+Modifier les lignes suivantes du fichier `.env` avec vos valeurs
 
 ```
 APP_ENV=
@@ -37,8 +37,6 @@ DATABASE_URL=
 MESSENGER_TRANSPORT_DSN=
 MAILER_DSN=
 ```
-
-Ou créez un fichier `.env.local` avec les lignes précédentes et ajoutez vos valeurs
 
 ## Lancer l'application
 

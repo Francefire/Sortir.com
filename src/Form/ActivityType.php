@@ -7,6 +7,7 @@ use App\Entity\City;
 use App\Entity\Location;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -15,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class ActivityType extends AbstractType
 {
@@ -61,10 +63,22 @@ class ActivityType extends AbstractType
                 'label' => 'Lieu :',
                 'placeholder' => 'Choisir un lieu',
             ])
+            ->add('image', FileType::class, [
+                'label' => 'Image de l\'activité',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '3000k',
+                        'mimeTypes' => [
+                            'image/*',
+                        ],
+                        'mimeTypesMessage' => 'Veuillez télécharger une image valide',
+                    ])
+                ],
+            ])
             ->add('save', SubmitType::class, ['label' => 'Enregistrer'])
-            ->add('publish', SubmitType::class, ['label' => 'Publier la sortie'])
-
-        ;
+            ->add('publish', SubmitType::class, ['label' => 'Publier la sortie']);
     }
 
 

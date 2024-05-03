@@ -4,46 +4,54 @@ namespace App\DataFixtures;
 
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class UserFixtures extends Fixture
+class UserFixtures extends Fixture implements DependentFixtureInterface
 {
+    public const USER_REFERENCE = 'user';
+
+    public function __construct(private readonly UserPasswordHasherInterface $passwordHasher)
+    {
+    }
+
     public function load(ObjectManager $manager): void
     {
-        $adminUser = new User();
-        $adminUser->setUsername('admin');
-        $adminUser->setRoles(['ROLE_ADMIN', 'ROLE_ORGANIZER', 'ROLE_USER']);
-        $adminUser->setPassword('$2y$13$BLOHm3ry89axh4hP8IRkZ.TtLvFiOD7ylUe33eEfD0fjS1twlJi8u'); // admin
-        $adminUser->setFirstname('Admin');
-        $adminUser->setLastname('Admin');
-        $adminUser->setEmail('admin@example.com');
-        $adminUser->setPhone('0123456789');
-        $adminUser->setAdministrator(true);
-        $adminUser->setDisabled(false);
-        $adminUser->setCampus($this->getReference(CampusFixtures::CAMPUS_REFERENCE));
+        $admin = new User();
+        $admin->setUsername('admin');
+        $admin->setRoles(['ROLE_ADMIN', 'ROLE_ORGANIZER', 'ROLE_USER']);
+        $admin->setPlainPassword('admin');
+        $admin->setFirstname('Admin');
+        $admin->setLastname('Admin');
+        $admin->setEmail('admin@example.com');
+        $admin->setPhone('0123456789');
+        $admin->setAdministrator(true);
+        $admin->setDisabled(false);
+        $admin->setCampus($this->getReference(CampusFixtures::CAMPUS_REFERENCE));
 
-        $manager->persist($adminUser);
+        $manager->persist($admin);
         $manager->flush();
 
-        $user = new User();
-        $user->setUsername('organizer');
-        $user->setRoles(['ROLE_ORGANIZER', 'ROLE_USER']);
-        $user->setPassword('$2y$13$S90ikw6boIj/vv1wXR8CDeXDwylu/g34hK368CvANvYCSwHqssFEO '); // organizer
-        $user->setFirstname('Organizer');
-        $user->setLastname('Organizer');
-        $user->setEmail('organizer@example.com');
-        $user->setPhone('0123456789');
-        $user->setAdministrator(false);
-        $user->setDisabled(false);
-        $user->setCampus($this->getReference(CampusFixtures::CAMPUS_REFERENCE));
+        $organizer = new User();
+        $organizer->setUsername('organizer');
+        $organizer->setRoles(['ROLE_ORGANIZER', 'ROLE_USER']);
+        $organizer->setPlainPassword('organizer');
+        $organizer->setFirstname('Organizer');
+        $organizer->setLastname('Organizer');
+        $organizer->setEmail('organizer@example.com');
+        $organizer->setPhone('0123456789');
+        $organizer->setAdministrator(false);
+        $organizer->setDisabled(false);
+        $organizer->setCampus($this->getReference(CampusFixtures::CAMPUS_REFERENCE));
 
-        $manager->persist($user);
+        $manager->persist($organizer);
         $manager->flush();
 
         $user = new User();
         $user->setUsername('user');
         $user->setRoles(['ROLE_USER']);
-        $user->setPassword('$2y$13$higOH5e6Iq7cdjvkd5f5d.nriAYzNnSJzq24rYNFPHzSbfbxwWWJG'); // user
+        $user->setPlainPassword('user');
         $user->setFirstname('User');
         $user->setLastname('User');
         $user->setEmail('user@example.com');
@@ -53,7 +61,30 @@ class UserFixtures extends Fixture
         $user->setCampus($this->getReference(CampusFixtures::CAMPUS_REFERENCE));
 
         $manager->persist($user);
+
+        $user->setUsername('user2');
+        $user->setLastname('Twin 2');
+
+        $manager->persist($user);
+
+        $user->setUsername('user3');
+        $user->setLastname('Twin 3');
+
+        $manager->persist($user);
+
+        $user->setUsername('user4');
+        $user->setLastname('Twin 4');
+
+        $manager->persist($user);
+
+        $user->setUsername('user5');
+        $user->setLastname('Twin 5');
+
+        $manager->persist($user);
+
         $manager->flush();
+
+        $this->addReference(self::USER_REFERENCE, $organizer);
     }
 
     public function getDependencies()

@@ -54,8 +54,12 @@ class EditUserType extends AbstractType
                     'attr' => ['placeholder' => 'Confirmer le mot de passe']
                 ],
             ])
-
-            ->add('profilePicture', FileType::class, [
+            ->add('campus', EntityType::class, [
+                'label' => 'Campus',
+                'class' => Campus::class,
+                'choice_label' => 'name',
+            ])
+            ->add('avatar', FileType::class, [
                 'label' => 'Photo de profil',
                 'mapped' => false,
                 'required' => false,
@@ -68,8 +72,7 @@ class EditUserType extends AbstractType
                         'mimeTypesMessage' => 'Veuillez télécharger une image valide',
                     ])
                 ],
-            ])
-            ->addEventSubscriber(new UserEditSubscriber());
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

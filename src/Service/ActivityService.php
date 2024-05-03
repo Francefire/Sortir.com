@@ -6,36 +6,52 @@ use App\Entity\Activity;
 use App\Entity\User;
 use App\Repository\StateRepository;
 use DateTime;
-use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ActivityService
 {
+    private const UPLOADS_DIR = '/images';
     private const UNIX_ONE_MONTH = 2629743;
     private readonly array $states;
 
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly StateRepository        $stateRepository
+        private readonly StateRepository        $stateRepository,
+        private readonly FileService            $fileService
     )
     {
         $this->states = $this->stateRepository->findAll();
     }
 
-    public function createActivity(Activity $activity, User $user, int $stateId): void
+    public function createActivity(Activity $activity, User $user, ?UploadedFile $file, int $stateId): void
     {
         $activity->setHost($user);
         $activity->setCampus($user->getCampus());
         $activity->setState($this->states[$stateId]);
 
+        if ($file) {
+            $fileName = $this->fileService->upload($file, self::UPLOADS_DIR);
+            $activity->setImageFileName($fileName);
+        }
+
         $this->entityManager->persist($activity);
         $this->entityManager->flush();
     }
 
-    public function editActivity(Activity $activity, int $stateId): void
+    public function editActivity(Activity $activity, int $stateId, ?UploadedFile $file): void
     {
         if ($this->isEditable($activity) && $stateId == 1) {
             $activity->setState($this->states[1]);
+        }
+
+        if ($file) {
+            if ($activity->getImageFileName() != null) {
+                $this->fileService->remove(self::UPLOADS_DIR, $activity->getImageFileName());
+            }
+
+            $fileName = $this->fileService->upload($file, '/images');
+            $activity->setImageFileName($fileName);
         }
 
         $this->entityManager->flush();
