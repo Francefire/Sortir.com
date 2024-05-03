@@ -20,3 +20,36 @@ body {
 .info-item-light {
     @apply  p-4 font-bold text-palette-accent-dark rounded-md border-2 border-palette-accent-dark;
 }
+
+.info-item-dark {
+    @apply  p-4 font-bold text-palette-dark-dark border-b-2 border-palette-dark-dark mb-6;
+}
+
+.input-form-label {
+    @apply text-palette-accent-dark absolute left-1 top-0 h-1/2;
+}
+
+.input-form {
+    @apply info-item-light uppercase mt-6 font-light w-full focus:border-palette-accent-dark/50 focus-visible:outline-none bg-palette-dark-dark;
+}
+
+.form-control {
+    @apply grid grid-cols-subgrid col-span-2 gap-2;
+}
+.form-control div {
+    @apply relative;
+}
+.form-control label {
+    @apply input-form-label;
+}
+.form-control input {
+    @apply input-form;
+}
+
+.form-control select {
+    @apply input-form text-center;
+}
+
+.bg-image {
+    @apply bg-cover bg-center bg-no-repeat w-full h-auto;
+}

@@ -3,10 +3,12 @@
 
 {% block body %}
     <div class="text-center max-w-screen-md mx-auto my-8">
-        <div class="w-full flex flex-col justify-center items-center rounded-xl overflow-hidden">
-            <h1 class="w-full bg-palette-dark-dark text-palette-accent-light p-8 text-4xl font-bold">{{ user.username|upper }}.</h1>
-            <div class="w-full bg-palette-dark-light p-8 grid grid-cols-2 gap-4">
-                <img src="{{ asset('images/uploads/profile/') }}{{ user.profilePictureFilename }}" alt="" class="col-span-2 mx-auto max-h-40 rounded-full border-color-three border-8">
+        <div class="w-full flex flex-col justify-center items-center rounded-xl overflow-hidden shadow-2xl shadow-palette-dark-dark">
+            <div class="w-full bg-palette-dark-light p-8 grid grid-cols-2 gap-4 border-dashed border-palette-accent-dark border-8">
+            <h1 class="w-full text-palette-accent-light p-8 text-4xl font-bold text-start">{{ user.username|upper }}.</h1>
+                <div class="col-span-2 mx-auto max-w-40 max-h-40 w-full rounded-full border-color-three border-8 aspect-square bg-cover bg-no-repeat bg-center" style='background-image: url("{{ asset('images/uploads/profile/') }}{{ user.profilePictureFilename }}")'>
+
+                </div>
                 <div class="grid grid-cols-subgrid col-span-2 gap-2">
                     <div class=" bg-palette-dark-light relative">
                         <label class="bg-transparent text-palette-accent-dark absolute left-1 top-0 h-1/2" for="fname">Prénom : </label>
@@ -30,7 +32,7 @@
                     </div>
                 </div>
                 <div class="grid grid-cols-subgrid gap-2 w-full col-span-2 place-items-center h-fit-content pt-6">
-                    <a href="{{ path('main_home') }}" class="btn-secondary-info  w-full max-w-full uppercase">Retour</a>
+                    <a href="{{ path('main_home') }}" class="btn-primary-info  w-full max-w-full uppercase">Retour</a>
                     {% if app.user.id == user.id %}
                         <a href="{{ path('users_edit', {'id': user.id}) }}" class="btn-secondary-info w-full max-w-full uppercase">Modifier mon profil</a>
                     {% endif %}
