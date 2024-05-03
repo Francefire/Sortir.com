@@ -62,26 +62,6 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
 
         $manager->persist($user);
 
-        $user->setUsername('user2');
-        $user->setLastname('Twin 2');
-
-        $manager->persist($user);
-
-        $user->setUsername('user3');
-        $user->setLastname('Twin 3');
-
-        $manager->persist($user);
-
-        $user->setUsername('user4');
-        $user->setLastname('Twin 4');
-
-        $manager->persist($user);
-
-        $user->setUsername('user5');
-        $user->setLastname('Twin 5');
-
-        $manager->persist($user);
-
         $manager->flush();
 
         $this->addReference(self::USER_REFERENCE, $organizer);
