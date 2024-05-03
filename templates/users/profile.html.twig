@@ -8,7 +8,7 @@
     <p>Téléphone : {{ user.phone }}</p>
     <p>Email : {{ user.email }}</p>
     <p>Campus : {{ user.campus.name }}</p>
-    <img src="{{ asset('public/uploads/avatars/') }}{{ user.avatarFilename }}" alt=""></img>
+    <img src="{{ asset('uploads/avatars/') }}{{ user.avatarFilename }}" alt=""></img>
 
     <a href="{{ path('main_home') }}" class="">Retour</a>
     {% if app.user.id == user.id %}

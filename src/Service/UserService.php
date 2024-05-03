@@ -17,7 +17,7 @@ class UserService
     {
     }
 
-    public function editUser(User $user, UploadedFile $file): void
+    public function editUser(User $user, ?UploadedFile $file): void
     {
         if (!empty($user->getPlainPassword())) {
             $user->setPassword($this->userPasswordHasher->hashPassword($user, $user->getPlainPassword()));

@@ -23,7 +23,7 @@ class ActivityService
         $this->states = $this->stateRepository->findAll();
     }
 
-    public function createActivity(Activity $activity, User $user, UploadedFile $file, int $stateId): void
+    public function createActivity(Activity $activity, User $user, ?UploadedFile $file, int $stateId): void
     {
         $activity->setHost($user);
         $activity->setCampus($user->getCampus());
@@ -38,7 +38,7 @@ class ActivityService
         $this->entityManager->flush();
     }
 
-    public function editActivity(Activity $activity, int $stateId, UploadedFile $file): void
+    public function editActivity(Activity $activity, int $stateId, ?UploadedFile $file): void
     {
         if ($this->isEditable($activity) && $stateId == 1) {
             $activity->setState($this->states[1]);
