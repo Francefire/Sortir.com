@@ -8,6 +8,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class LocationFixtures extends Fixture
 {
+    public const LOCATION_REFERENCE = 'location';
     public function load(ObjectManager $manager): void
     {
         $location = new Location();
@@ -19,6 +20,8 @@ class LocationFixtures extends Fixture
 
         $manager->persist($location);
         $manager->flush();
+
+        $this->addReference(self::LOCATION_REFERENCE, $location);
     }
 
     public function getDependencies()
