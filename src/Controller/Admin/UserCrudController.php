@@ -3,6 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
@@ -11,6 +13,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+
 
 class UserCrudController extends AbstractCrudController
 {
@@ -31,7 +35,7 @@ class UserCrudController extends AbstractCrudController
         return [
             IdField::new('id')->setLabel('Identifiant')->hideOnForm(),
             TextField::new('username')->setLabel('Nom d\'utilisateur'),
-            TextField::new('password')->setLabel('Mot de passe')->onlyOnForms(),
+            TextField::new('plainPassword')->setLabel('Mot de passe')->setRequired(true)->setFormType(PasswordType::class)->onlyOnForms(),
             TextField::new('phone')->setLabel('Numéro de téléphone'),
             EmailField::new('email')->setLabel('Email'),
             TextField::new('lastname')->setLabel('Nom'),
@@ -42,5 +46,10 @@ class UserCrudController extends AbstractCrudController
             BooleanField::new('disabled')->setLabel('Désactivé'),
             // ImageField::new('profilePicture')->setBasePath('uploads/profile'),
         ];
+    }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions->add(Crud::PAGE_INDEX, Action::DETAIL);
     }
 }

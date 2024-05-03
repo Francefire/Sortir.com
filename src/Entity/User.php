@@ -61,8 +61,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 12, nullable: true)]
     #[Assert\Regex(pattern: '/^0[1-9]([-. ]?[0-9]{2}){4}$/')]
-    #[Assert\NotBlank]
-    #[Assert\NotNull]
     private ?string $phone = null;
 
     #[ORM\Column]
