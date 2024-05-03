@@ -6,12 +6,12 @@ use App\Entity\Activity;
 use App\Entity\User;
 use App\Repository\StateRepository;
 use DateTime;
-use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ActivityService
 {
+    private const UPLOADS_DIR = '/images';
     private const UNIX_ONE_MONTH = 2629743;
     private readonly array $states;
 
@@ -31,7 +31,7 @@ class ActivityService
         $activity->setState($this->states[$stateId]);
 
         if ($file) {
-            $fileName = $this->fileService->upload($file, '/images');
+            $fileName = $this->fileService->upload($file, self::UPLOADS_DIR);
             $activity->setImageFileName($fileName);
         }
 
@@ -46,6 +46,10 @@ class ActivityService
         }
 
         if ($file) {
+            if ($activity->getImageFileName() != null) {
+                $this->fileService->remove(self::UPLOADS_DIR, $activity->getImageFileName());
+            }
+
             $fileName = $this->fileService->upload($file, '/images');
             $activity->setImageFileName($fileName);
         }

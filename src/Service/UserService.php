@@ -9,6 +9,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserService
 {
+    private const UPLOADS_DIR = '/avatars';
+
     public function __construct(
         private readonly EntityManagerInterface      $entityManager,
         private readonly UserPasswordHasherInterface $userPasswordHasher,
@@ -24,7 +26,11 @@ class UserService
         }
 
         if ($file) {
-            $fileName = $this->fileService->upload($file, '/avatars');
+            if ($user->getAvatarFileName() != null) {
+                $this->fileService->remove(self::UPLOADS_DIR, $user->getAvatarFileName());
+            }
+            
+            $fileName = $this->fileService->upload($file, self::UPLOADS_DIR);
             $user->setAvatarFileName($fileName);
         }
 

@@ -14,6 +14,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\HttpFoundation\Response;
@@ -53,7 +54,7 @@ class UserCrudController extends AbstractCrudController
             ArrayField::new('roles')->setLabel('Rôles'),
             BooleanField::new('administrator')->setLabel('Administrateur'),
             BooleanField::new('disabled')->setLabel('Désactivé'),
-            //ImageField::new('avatar')->setUploadDir('public/uploads/avatars/')->onlyOnDetail(),
+            ImageField::new('avatar')->setBasePath('public/uploads/avatars')->onlyOnDetail(),
         ];
     }
 
@@ -64,13 +65,13 @@ class UserCrudController extends AbstractCrudController
         return $actions
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
             ->add(Crud::PAGE_EDIT, $deleteAvatar);
-
     }
 
     public function deleteAvatar(AdminContext $context): Response
     {
         $user = $context->getEntity()->getInstance();
+        $this->fileService->remove('/avatars', $user->getAvatarFilename());
 
-        return $this->redirectToRoute('admin');
+        return $this->redirectToRoute('');
     }
 }

@@ -26,4 +26,13 @@ class FileService
 
         return $fileName;
     }
+
+    public function remove(string $path, ?string $filename): void
+    {
+        if (empty($filename)) {
+            return;
+        }
+
+        $this->filesystem->remove(self::UPLOADS_DIR . $path . '/' . $filename);
+    }
 }
