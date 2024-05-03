@@ -8,6 +8,7 @@ use App\Repository\StateRepository;
 use DateTime;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ActivityService
 {
@@ -16,26 +17,37 @@ class ActivityService
 
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly StateRepository        $stateRepository
+        private readonly StateRepository        $stateRepository,
+        private readonly FileService            $fileService
     )
     {
         $this->states = $this->stateRepository->findAll();
     }
 
-    public function createActivity(Activity $activity, User $user, int $stateId): void
+    public function createActivity(Activity $activity, User $user, ?UploadedFile $file, int $stateId): void
     {
         $activity->setHost($user);
         $activity->setCampus($user->getCampus());
         $activity->setState($this->states[$stateId]);
 
+        if ($file) {
+            $fileName = $this->fileService->upload($file, '/images');
+            $activity->setImageFileName($fileName);
+        }
+
         $this->entityManager->persist($activity);
         $this->entityManager->flush();
     }
 
-    public function editActivity(Activity $activity, int $stateId): void
+    public function editActivity(Activity $activity, int $stateId, ?UploadedFile $file): void
     {
         if ($this->isEditable($activity) && $stateId == 1) {
             $activity->setState($this->states[1]);
+        }
+
+        if ($file) {
+            $fileName = $this->fileService->upload($file, '/images');
+            $activity->setImageFileName($fileName);
         }
 
         $this->entityManager->flush();

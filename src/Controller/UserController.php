@@ -33,7 +33,9 @@ class UserController extends AbstractController
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $userService->editUser($user);
+            $file = $editForm->get('avatar')->getData();
+
+            $userService->editUser($user, $file);
 
             $this->addFlash('success', 'Profil modifié avec succès');
             return $this->redirectToRoute('users_profile', ['id' => $user->getId()]);
