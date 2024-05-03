@@ -3,8 +3,9 @@
 namespace App\Scheduler\Handler;
 
 use App\Entity\Activity;
+use App\Entity\State;
 use App\Scheduler\Message\CheckState;
-use App\Service\StateService;
+use App\Service\ActivityService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
@@ -17,16 +18,11 @@ class CheckStateHandler
     }
     public function __invoke(CheckState $message)
     {
-        // @TODO - Implement the logic to check the state of the activity
-        $stateService = new StateService($this->em);
+        $activityService = new ActivityService($this->em, $this->em->getRepository(State::class));
         $activitesToCheck = $this->em->getRepository(Activity::class)->findPresentActivites();
         foreach($activitesToCheck as $activity)
         {
-            /*
-            $stateService->correctActivityState($activity);
-            $this->em->persist($activity);
-            */
-            //dump($this->em);
+            $activityService->updateActivity($activity);
             $this->em->flush();
         }
 

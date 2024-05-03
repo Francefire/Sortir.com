@@ -35,6 +35,11 @@ class EditUserType extends AbstractType
             ->add('phone', null, [
                 'label' => 'Téléphone'
             ])
+            ->add('campus', EntityType::class, [
+                'label' => 'Campus',
+                'class' => Campus::class,
+                'choice_label' => 'name',
+            ])
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'mapped' => true,
@@ -49,11 +54,7 @@ class EditUserType extends AbstractType
                     'attr' => ['placeholder' => 'Confirmer le mot de passe']
                 ],
             ])
-            ->add('campus', EntityType::class, [
-                'label' => 'Campus',
-                'class' => Campus::class,
-                'choice_label' => 'name',
-            ])
+
             ->add('profilePicture', FileType::class, [
                 'label' => 'Photo de profil',
                 'mapped' => false,

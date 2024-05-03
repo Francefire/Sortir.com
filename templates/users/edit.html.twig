@@ -2,14 +2,24 @@
 {% block title %}{{ parent() }} - Mon profile {% endblock %}
 
 {% block body %}
-    <h1>Mon profile</h1>
-    {{ form_errors(editForm) }}
     {{ form_start(editForm) }}
-    {{ form_widget(editForm) }}
-    <button>Enregistrer</button>
-    <a href="{{ path('main_home') }}">Retour</a>
-    {{ form_end(editForm) }}
+    <div class="text-center max-w-screen-md mx-auto my-8">
+        <div class="w-full flex flex-col justify-center items-center rounded-xl overflow-hidden shadow-2xl shadow-palette-dark-dark">
+            {{ form_errors(editForm) }}
+            <div class="w-full bg-palette-dark-light p-8 grid grid-cols-2 gap-4 border-dashed border-palette-accent-dark border-8">
+                <h1 class="w-full text-palette-accent-light p-6 text-4xl font-bold text-start text-inline">{{ user.username|upper }}.</h1><h2 class="text-palette-accent-light p-6 text-2xl font-bold text-end text-inline">Modification<br> du profil</h2>
+                <div class="col-span-2 mx-auto max-w-40 max-h-40 w-full rounded-full border-color-three border-8 aspect-square bg-cover bg-no-repeat bg-center" style='background-image: url("{{ asset('images/uploads/profile/') }}{{ user.profilePictureFilename }}")'>
+                </div>
+                {{ form_widget(editForm, {'attr': {'class': 'form-control'}}) }}
+                <div class="grid grid-cols-subgrid gap-2 w-full col-span-2 place-items-center h-fit-content pt-6">
+                    <a href="{{ path('users_profile', {'id': app.user.id}) }}" class="btn-primary-info  w-full max-w-full uppercase">Retour</a>
+                    <button class="btn-secondary-info w-full max-w-full uppercase">Confirmer</button>
 
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_end(editForm) }}
 
 {% endblock %}
 

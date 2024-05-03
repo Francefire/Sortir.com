@@ -1,21 +1,54 @@
-Nom de la sortie: {{ activity.name }}
-<br>
-Date de la sortie: {{ activity.startDatetime|date('d/m/Y H:i', 'Europe/Paris') }}
-<br>
-Durée de la sortie : {{ activity.duration | date('H:i') }}
-<br>
-Description de la sortie: {{ activity.description }}
-<br>
-Nombre de participants: {{ activity.participants|length }}
-<br>
-Nombre de participants maximum: {{ activity.maxParticipants }}
-<br>
-Lieu de la sortie: {{ activity.location.name }}
-<br>
-Organisateur de la sortie: {{ activity.host.firstName }}
-<br>
-Campus de la sortie : {{ activity.campus.name }}
-<br>
-Etat de la sortie: {{ activity.state.label }}
-<br>
-Date limite d'inscription : {{ activity.registerLimitDatetime|date('d/m/Y H:i', 'Europe/Paris') }}
+<div class="grid grid-cols-subgrid gap-2 p-4 max-w-80">
+    <div class="relative">
+        <label class="bg-transparent  text-palette-dark-light absolute left-1 top-0 h-1/2" for="startDate">Date de la sortie : </label>
+        <input class="info-item-dark uppercase bg-transparent mt-6 font-light w-full" id="startDate" value="{{ activity.startDatetime|date('d/m/Y H:i', 'Europe/Paris') }}" disabled>
+    </div>
+    <div class="relative">
+        <label class="bg-transparent  text-palette-dark-light absolute left-1 top-0 h-1/2" for="duration">Durée de la sortie : </label>
+        <input class="info-item-dark uppercase bg-transparent mt-6 font-light w-full" id="duration" value="{{ activity.duration | date('H:i') }}" disabled>
+    </div>
+    <div class="relative">
+        <label class="bg-transparent  text-palette-dark-light absolute left-1 top-0 h-1/2" for="participants">Nombre de participants : </label>
+        <input class="info-item-dark uppercase bg-transparent mt-6 font-light w-full" id="participants" value="{{ activity.participants|length }}" disabled>
+    </div>
+    <div class="relative">
+        <label class="bg-transparent  text-palette-dark-light absolute left-1 top-0 h-1/2" for="maxParticipants">Nombre de participants maximum : </label>
+        <input class="info-item-dark uppercase bg-transparent mt-6 font-light w-full" id="maxParticipants" value="{{ activity.maxParticipants }}" disabled>
+    </div>
+    <div class="relative">
+        <label class="bg-transparent  text-palette-dark-light absolute left-1 top-0 h-1/2" for="location">Lieu de la sortie : </label>
+        <input class="info-item-dark uppercase bg-transparent mt-6 font-light w-full" id="location" value="{{ activity.location.name }}" disabled>
+    </div>
+    <div class="relative">
+        <label class="bg-transparent  text-palette-dark-light absolute left-1 top-0 h-1/2" for="host">Organisateur de la sortie : </label>
+        <input class="info-item-dark uppercase bg-transparent mt-6 font-light w-full" id="host" value="{{ activity.host.firstName }}" disabled>
+    </div>
+    <div class="relative">
+        <label class="bg-transparent  text-palette-dark-light absolute left-1 top-0 h-1/2" for="campus">Campus de la sortie : </label>
+        <input class="info-item-dark uppercase bg-transparent mt-6 font-light w-full" id="campus" value="{{ activity.campus.name }}" disabled>
+    </div>
+    <div class="relative">
+        <label class="bg-transparent  text-palette-dark-light absolute left-1 top-0 h-1/2" for="state">Etat de la sortie : </label>
+        <input class="info-item-dark uppercase bg-transparent mt-6 font-light w-full" id="state" value="{{ activity.state.label }}" disabled>
+    </div>
+    <div class="relative">
+        <label class="bg-transparent  text-palette-dark-light absolute left-1 top-0 h-1/2" for="registerLimitDatetime">Date limite d'inscription : </label>
+        <input class="info-item-dark uppercase bg-transparent mt-6 font-light w-full" id="registerLimitDatetime" value="{{ activity.registerLimitDatetime|date('d/m/Y H:i', 'Europe/Paris') }}" disabled>
+    </div>
+    <div class="col-start-2 col-end-2 flex flex-row justify-around">
+        {% if user in activity.participants %}
+            <form action="{{ path('activities_leave', {'id': activity.id}) }}" method="POST">
+                <button type="submit" class="btn-primary-info">Se désinscrire</button>
+            </form>
+        {% else %}
+            <form action="{{ path('activities_join', {'id': activity.id}) }}" method="POST">
+                <button type="submit" class="btn-primary-info">S'inscrire</button>
+            </form>
+        {% endif %}
+        {% if user == activity.host %}
+            <form action="{{ path('activities_cancel', {'id': activity.id}) }}" method="POST">
+                <button type="submit" class="btn-primary-info">Annuler la sortie</button>
+            </form>
+        {% endif %}
+    </div>
+</div>
