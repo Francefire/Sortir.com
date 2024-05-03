@@ -15,14 +15,17 @@
             <div class="text-palette-light-light p-8 w-full">
                 <h2>Liste des participants</h2>
                 <table class="w-full">
-                    <tr>
+                    <tr class="text-start">
                         <th>Pseudo</th>
                         <th>Prénom</th>
                     </tr>
                     {% for participant in activity.participants %}
                         <tr class="overflow-y-scroll">
-                            <td>
-                                <a href="{{ path('users_profile', {'id': participant.id}) }}">{{ participant.username }}</a>
+                            <td class="flex flex-row">
+                                <twig:ux:icon name="ph:user" class="w-6 h-6"/>
+                                <a href="{{ path('users_profile', {'id': participant.id}) }}">
+                                    {{ participant.username }}
+                                </a>
                             </td>
                             <td>{{ participant.firstname }}</td>
                         </tr>
