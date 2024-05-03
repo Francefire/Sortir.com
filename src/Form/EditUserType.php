@@ -35,6 +35,11 @@ class EditUserType extends AbstractType
             ->add('phone', null, [
                 'label' => 'Téléphone'
             ])
+            ->add('campus', EntityType::class, [
+                'label' => 'Campus',
+                'class' => Campus::class,
+                'choice_label' => 'name',
+            ])
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'mapped' => true,

@@ -2,35 +2,37 @@
 {% block title %}{{ parent() }} - {{ activity.name }}{% endblock %}
 
 {% block body %}
-    {% include('activities/include/display_activity.html.twig') %}
-    <img src="{{ asset('uploads/images/') }}{{ activity.imageFileName }}" alt="">
-    {% if user in activity.participants %}
-        <form action="{{ path('activities_leave', {'id': activity.id}) }}" method="POST">
-            <button type="submit">Se désinscrire</button>
-        </form>
-    {% else %}
-        <form action="{{ path('activities_join', {'id': activity.id}) }}" method="POST">
-            <button type="submit">S'inscrire</button>
-        </form>
-    {% endif %}
-    {% if user == activity.host %}
-        <form action="{{ path('activities_cancel', {'id': activity.id}) }}" method="POST">
-            <button type="submit">Annuler la sortie</button>
-        </form>
-    {% endif %}
-    <h2>Liste des participants</h2>
-    <table>
-        <tr>
-            <th>Pseudo</th>
-            <th>Prénom</th>
-        </tr>
-        {% for participant in activity.participants %}
-            <tr>
-                <td><a href="{{ path('users_profile', {'id': participant.id}) }}">{{ participant.username }}</a></td>
-                <td>{{ participant.firstname }}</td>
-            </tr>
-        {% endfor %}
-    </table>
+    <div class="grid grid-cols-2 bg-palette-light-light">
+        <div class="bg-palette-dark-light flex flex-col text-pretty">
+            <h1 class="text-4xl text-palette-light-light font-extrabold">{{ activity.name|upper }}</h1>
+            <p class="text-xl text-palette-light-light font-light p-8">{{ activity.description }}</p>
+            <div class="p-8">
+                <img src="https://placehold.co/600x400" alt="image de la sortie" class="w-full h-auto">
+                {#                <div class="aspect-auto bg-image absolute top-0 left-0 right-0 bottom-0" #}
+                {#                     style="background-image: url('https://placehold.co/600x400')"> #}
+                {#                </div> #}
+            </div>
+            <div class="text-palette-light-light p-8 w-full">
+                <h2>Liste des participants</h2>
+                <table class="w-full">
+                    <tr>
+                        <th>Pseudo</th>
+                        <th>Prénom</th>
+                    </tr>
+                    {% for participant in activity.participants %}
+                        <tr class="overflow-y-scroll">
+                            <td>
+                                <a href="{{ path('users_profile', {'id': participant.id}) }}">{{ participant.username }}</a>
+                            </td>
+                            <td>{{ participant.firstname }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        {% include('activities/include/display_activity.html.twig') %}
+
+    </div>
 {% endblock %}
 
 
