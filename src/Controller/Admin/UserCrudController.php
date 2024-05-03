@@ -3,9 +3,11 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
+use App\Service\FileService;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
@@ -14,10 +16,17 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\HttpFoundation\Response;
 
 
 class UserCrudController extends AbstractCrudController
 {
+    public function __construct(
+        private readonly FileService $fileService
+    )
+    {
+    }
+
     public static function getEntityFqcn(): string
     {
         return User::class;
@@ -44,12 +53,24 @@ class UserCrudController extends AbstractCrudController
             ArrayField::new('roles')->setLabel('Rôles'),
             BooleanField::new('administrator')->setLabel('Administrateur'),
             BooleanField::new('disabled')->setLabel('Désactivé'),
-            // ImageField::new('profilePicture')->setBasePath('uploads/profile'),
+            //ImageField::new('avatar')->setUploadDir('public/uploads/avatars/')->onlyOnDetail(),
         ];
     }
 
     public function configureActions(Actions $actions): Actions
     {
-        return $actions->add(Crud::PAGE_INDEX, Action::DETAIL);
+        $deleteAvatar = Action::new('deleteAvatar', 'Delete avatar')
+            ->linkToCrudAction('deleteAvatar');
+        return $actions
+            ->add(Crud::PAGE_INDEX, Action::DETAIL)
+            ->add(Crud::PAGE_EDIT, $deleteAvatar);
+
+    }
+
+    public function deleteAvatar(AdminContext $context): Response
+    {
+        $user = $context->getEntity()->getInstance();
+
+        return $this->redirectToRoute('admin');
     }
 }

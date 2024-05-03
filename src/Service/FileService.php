@@ -10,7 +10,6 @@ class FileService
 
     public function upload(UploadedFile $file): string
     {
-
         $fileHash = md5_file($file->getPathname());
         $fileName = $fileHash . '.' . $file->guessExtension();
         $file->move($this->getTargetDirectory(), $fileName);
