@@ -3,31 +3,47 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+    <form method="post" class="max-w-sm mx-auto" >
+        {% if error %}
+            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
 
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+        {% if app.user %}
+            <div class="mb-3">
+                You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+            </div>
+        {% endif %}
+
+
+        <h1 class="text-2xl font-bold mb-12">Se Connecter</h1>
+        <div class="mb-5">
+            <label for="inputUsername" class="block  text-m font-light ">Identifiant</label>
+            <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control shadow-sm border border-black bg-color-one text-sm    block w-full p-2.5 " autocomplete="username" required autofocus />
         </div>
-    {% endif %}
+        <div class="mb-5">
+            <label for="inputPassword" class="block  text-m font-light">Mot de passe</label>
+            <input type="password" name="password" id="inputPassword" class="form-control shadow-sm border border-black bg-color-one text-sm   block w-full p-2.5 " autocomplete="current-password" required />
+        </div>
+        <input type="hidden" name="_csrf_token"
+               value="{{ csrf_token('authenticate') }}"
+        >
+        <div class="flex items-start mb-5">
+            <div>
+                <input id="remember" aria-describedby="remember" type="checkbox" class="w-5 h-5 border border-black  bg-color-one" >
+            </div>
+            <div class="ml-3 text-sm">
+                <label for="remember" class="text-black">Se souvenir de moi</label>
+            </div>
 
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputUsername">Username</label>
-    <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" autocomplete="username" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+        </div>
+        <div class="flex mb-4 align-items-center">
+            <button type="submit" class="flex align-items-center duration-100 text-white bg-black hover:bg-color-three hover:text-black  font-medium  text-sm px-3 py-1.5 text-center ">Connexion</button>
+        </div>
+        <a class="hover:text-color-three duration-100" href="{{ path('app_forgot_password_request') }}">Mot de passe Oublié ?</a>
 
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
-    <input id="remember" aria-describedby="remember" type="checkbox" class="" >
-    <label for="remember" class="">Se souvenir de moi</label><br>
-    <a href="{{ path('app_forgot_password_request') }}">Mot de passe Oublié ?</a>
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
-</form>
+
+
+    </form>
+
+
 {% endblock %}
