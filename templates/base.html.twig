@@ -59,5 +59,8 @@
     <p>&copy; 2024 Valentin, Maxime, Touhami</p>
 </footer>
 <script src="https://cdn.tailwindcss.com"></script>
+{% block javascripts %}
+    {% block importmap %}{{ importmap('app') }}{% endblock %}
+{% endblock %}
 </body>
 </html>

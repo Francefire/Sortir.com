@@ -2,16 +2,41 @@
 {% block title %}{{ parent() }} - {{ user.username }} {% endblock %}
 
 {% block body %}
-    <h1>{{ user.username }}</h1>
-    <p>Prénom : {{ user.firstname }}</p>
-    <p>Nom : {{ user.lastname }}</p>
-    <p>Téléphone : {{ user.phone }}</p>
-    <p>Email : {{ user.email }}</p>
-    <p>Campus : {{ user.campus.name }}</p>
-    <img src="{{ asset('images/uploads/profile/') }}{{ user.profilePictureFilename }}" alt=""></img>
+    <div class="text-center max-w-screen-md mx-auto my-8">
+        <div class="w-full flex flex-col justify-center items-center rounded-xl overflow-hidden">
+            <h1 class="w-full bg-palette-dark-dark text-palette-accent-light p-8 text-4xl font-bold">{{ user.username|upper }}.</h1>
+            <div class="w-full bg-palette-dark-light p-8 grid grid-cols-2 gap-4">
+                <img src="{{ asset('images/uploads/profile/') }}{{ user.profilePictureFilename }}" alt="" class="col-span-2 mx-auto max-h-40 rounded-full border-color-three border-8">
+                <div class="grid grid-cols-subgrid col-span-2 gap-2">
+                    <div class=" bg-palette-dark-light relative">
+                        <label class="bg-transparent text-palette-accent-dark absolute left-1 top-0 h-1/2" for="fname">Prénom : </label>
+                        <input class="info-item-light uppercase bg-transparent mt-6 font-light w-full" id="fname" value="{{ user.firstname }}" disabled>
+                    </div>
+                    <div class=" bg-palette-dark-light relative">
+                        <label class="bg-transparent text-palette-accent-dark absolute left-1 top-0 h-1/2" for="lname">Nom : </label>
+                        <input class="info-item-light uppercase bg-transparent mt-6 font-light w-full" id="lname" value="{{ user.lastname }}" disabled>
+                    </div>
+                    <div class=" bg-palette-dark-light relative">
+                        <label class="bg-transparent text-palette-accent-dark absolute left-1 top-0 h-1/2" for="phone">Téléphone : </label>
+                        <input class="info-item-light uppercase bg-transparent mt-6 font-light w-full" id="phone" value="{{ user.phone }}" disabled>
+                    </div>
+                    <div class=" bg-palette-dark-light relative">
+                        <label class="bg-transparent text-palette-accent-dark absolute left-1 top-0 h-1/2" for="email">Email : </label>
+                        <input class="info-item-light uppercase bg-transparent mt-6 font-light w-full" id="email" value="{{ user.email }}" disabled>
+                    </div>
+                    <div class=" bg-palette-dark-light relative">
+                        <label class="bg-transparent text-palette-accent-dark absolute left-1 top-0 h-1/2" for="campus">Campus : </label>
+                        <input class="info-item-light uppercase bg-transparent mt-6 font-light w-full" id="campus" value="{{ user.campus.name }}" disabled>
+                    </div>
+                </div>
+                <div class="grid grid-cols-subgrid gap-2 w-full col-span-2 place-items-center h-fit-content pt-6">
+                    <a href="{{ path('main_home') }}" class="btn-secondary-info  w-full max-w-full uppercase">Retour</a>
+                    {% if app.user.id == user.id %}
+                        <a href="{{ path('users_edit', {'id': user.id}) }}" class="btn-secondary-info w-full max-w-full uppercase">Modifier mon profil</a>
+                    {% endif %}
 
-    <a href="{{ path('main_home') }}" class="">Retour</a>
-    {% if app.user.id == user.id %}
-        <a href="{{ path('users_edit', {'id': user.id}) }}" class="">Modifier mon profil</a>
-    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

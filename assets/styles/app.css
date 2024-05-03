@@ -4,3 +4,19 @@
 
 body {
 }
+
+.btn-primary {
+    @apply text-palette-accent-light bg-palette-dark-dark rounded-md p-2 py-2.5 max-w-80 hover:bg-palette-dark-light transition cursor-pointer;
+}
+.btn-secondary {
+    @apply text-palette-dark-dark bg-palette-light-dark rounded-md p-2 py-2.5 max-w-80 hover:bg-palette-light-light/50 border-2 border-palette-dark-dark transition cursor-pointer;
+}
+.btn-primary-info {
+    @apply font-bold text-xl text-palette-accent-light bg-palette-dark-dark rounded-md p-4 hover:bg-palette-dark-light transition cursor-pointer;
+}
+.btn-secondary-info {
+    @apply font-bold text-xl bg-palette-accent-dark text-palette-dark-dark rounded-md p-4 hover:bg-palette-accent-light/50 transition cursor-pointer;
+}
+.info-item-light {
+    @apply  p-4 font-bold text-palette-accent-dark rounded-md border-2 border-palette-accent-dark;
+}
